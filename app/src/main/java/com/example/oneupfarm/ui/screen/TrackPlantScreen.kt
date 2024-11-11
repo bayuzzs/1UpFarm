@@ -21,12 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.component.PlantCard
 import com.example.oneupfarm.ui.theme.SurfaceColor
 
 @Composable
-fun TrackPlantScreen(modifier: Modifier = Modifier) {
+fun TrackPlantScreen(navController: NavController= rememberNavController(), modifier: Modifier = Modifier) {
 //    Scaffold(
 //        bottomBar = {
 //            OUFBottomBar(modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues()))

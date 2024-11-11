@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,10 +46,15 @@ import com.example.oneupfarm.ui.theme.Poppins
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.R
+import com.example.oneupfarm.rememberImeState
 
 
 @Composable
-fun newPasswordScreen() {
+fun NewPasswordScreen(navController: NavController= rememberNavController()) {
     val isImeVisible by rememberImeState()
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
@@ -173,8 +178,8 @@ fun newPasswordScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
@@ -197,8 +202,8 @@ fun newPasswordScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
@@ -227,8 +232,8 @@ fun newPasswordScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
@@ -285,5 +290,5 @@ fun newPasswordScreen() {
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun newPasswordScreenPreview() {
-    newPasswordScreen()
+    NewPasswordScreen()
 }

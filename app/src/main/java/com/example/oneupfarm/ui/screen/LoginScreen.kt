@@ -1,9 +1,10 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,9 +17,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -42,10 +45,16 @@ import androidx.compose.ui.unit.sp
 import com.example.oneupfarm.ui.theme.Poppins
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.R
+import com.example.oneupfarm.rememberImeState
+import com.example.oneupfarm.ui.navigation.Screen
 
 
 @Composable
-fun loginScreen() {
+fun LoginScreen(navController: NavController= rememberNavController()) {
     val isImeVisible by rememberImeState()
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
@@ -97,7 +106,7 @@ fun loginScreen() {
                     Text(
                         text = "Selamat Datang!",
                         style = TextStyle(
-                            fontSize = 36.sp,
+                            fontSize = 32.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
@@ -122,9 +131,10 @@ fun loginScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
                     )
@@ -145,9 +155,10 @@ fun loginScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
                         trailingIcon = {
@@ -175,7 +186,7 @@ fun loginScreen() {
                     Spacer(modifier = Modifier.height(44.dp))
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate(Screen.Profile.route) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -239,5 +250,5 @@ fun loginScreen() {
     @Preview(showBackground = true, widthDp = 412, heightDp = 917)
     @Composable
     fun loginScreenPreview() {
-        loginScreen()
+        LoginScreen()
     }

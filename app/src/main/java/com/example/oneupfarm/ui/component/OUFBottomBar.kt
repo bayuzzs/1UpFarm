@@ -38,7 +38,7 @@ import com.example.oneupfarm.model.NavigationItem
 import com.example.oneupfarm.ui.navigation.Screen
 
 @Composable
-fun OUFBottomBar(navController: NavController ,modifier: Modifier = Modifier) {
+fun OUFBottomBar(navController: NavController, modifier: Modifier = Modifier) {
     var selectedItem by remember { mutableStateOf(1) }
     val items = listOf("Profile", "Plants", "Calendar", "Store")
 
@@ -59,23 +59,23 @@ fun OUFBottomBar(navController: NavController ,modifier: Modifier = Modifier) {
                 NavItem(
                     DataSource.navigationItems[0],
                     selected = Screen.Profile.route == navController.currentDestination?.route,
-                    navigationOnClick = {navController.navigate(Screen.Profile.route)  }
+                    navigationOnClick = { navController.navigate(Screen.Profile.route) }
                 )
                 NavItem(
                     DataSource.navigationItems[1],
-                    selected = Screen.Login.route == navController.currentDestination?.route,
-                    navigationOnClick = { navController.navigate(Screen.Login.route) }
+                    selected = Screen.TrackPlant.route == navController.currentDestination?.route,
+                    navigationOnClick = { navController.navigate(Screen.TrackPlant.route) }
                 )
                 Spacer(modifier = Modifier)
                 NavItem(
                     DataSource.navigationItems[2],
-                    selected = false,
-                    navigationOnClick = { }
+                    selected = Screen.Calendar.route == navController.currentDestination?.route,
+                    navigationOnClick = { navController.navigate(Screen.Calendar.route) }
                 )
                 NavItem(
                     DataSource.navigationItems[3],
-                    selected = false,
-                    navigationOnClick = { }
+                    selected = Screen.MarketPlace.route == navController.currentDestination?.route,
+                    navigationOnClick = { navController.navigate(Screen.MarketPlace.route) }
                 )
             }
 

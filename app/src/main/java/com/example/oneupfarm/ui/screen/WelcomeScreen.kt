@@ -1,4 +1,4 @@
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -28,6 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.oneupfarm.R
+import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 import com.example.oneupfarm.ui.theme.purple900
 import com.example.oneupfarm.ui.theme.white
@@ -37,6 +41,7 @@ import com.example.oneupfarm.ui.theme.white
 
 @Composable
 fun WelcomeScreen(
+    navController: NavController= rememberNavController(),
     modifier: Modifier = Modifier
 ) {
 
@@ -89,7 +94,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(38.dp))
 
             Button(
-                onClick = { /* TODO: Handle Login Click */ },
+                onClick = { navController.navigate(Screen.Login.route) },
                 shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = white),
@@ -113,7 +118,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = { /* TODO: Handle Register Click */ },
+                onClick = { navController.navigate(Screen.Register.route) },
                 shape = RoundedCornerShape(24.dp),
                 border = BorderStroke(2.dp, Color.White),
                 colors = ButtonDefaults.buttonColors(

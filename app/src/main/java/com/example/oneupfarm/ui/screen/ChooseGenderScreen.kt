@@ -1,4 +1,4 @@
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,10 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.theme.Poppins
 
 @Composable
-fun genderScreen() {
+fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
     // Track which avatar is selected
     var selectedAvatarIndex by remember { mutableStateOf<Int?>(null) }
 
@@ -184,5 +188,5 @@ fun genderScreen() {
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun genderScreenPreview() {
-    genderScreen()
+    ChooseGenderScreen()
 }

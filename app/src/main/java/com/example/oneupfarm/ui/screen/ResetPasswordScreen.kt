@@ -1,9 +1,11 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,19 +17,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,21 +46,46 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.R
+import com.example.oneupfarm.rememberImeState
 import com.example.oneupfarm.ui.theme.Poppins
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.getValue
-
 
 @Composable
-fun registerScreen() {
+fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
     val isImeVisible by rememberImeState()
+    val (email, setEmail) = remember { mutableStateOf("") }
+    val (password, setPassword) = remember { mutableStateOf("") }
+    val (confirmPassword, setConfirmPassword) = remember { mutableStateOf("") }
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
         Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            /* .fillMaxHeight(if (isImeVisible) 0f else 0.9f), */
+            modifier = Modifier.fillMaxSize(),
         ) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 74.dp)
+                    .align(Alignment.TopCenter),
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(onClick = { /* Handle close action */ },
+                    modifier = Modifier
+                        .size(62.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close",
+                        tint = Color.Black,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
 
             Image(
                 painter = painterResource(id = R.drawable.ic_ellipse),
@@ -62,29 +94,28 @@ fun registerScreen() {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+                    .offset(y = 225.dp)
             )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.63f)
+                    .fillMaxHeight(0.55f)
                     .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
+                    .animateContentSize()
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, top = 46.dp),
+                        .padding(start = 30.dp, end = 30.dp, top = 56.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Welcome text
                     Text(
-                        text = "Halo,",
+                        text = "Yah,",
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -95,9 +126,9 @@ fun registerScreen() {
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
-                        text = "Daftar Sekarang!",
+                        text = "Lupa password?",
                         style = TextStyle(
-                            fontSize = 36.sp,
+                            fontSize = 32.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
@@ -105,31 +136,21 @@ fun registerScreen() {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                    TextField(
-                        value = "",
-                        onValueChange = { /* Handle name input */ },
-                        placeholder = { Text("Nama Lengkap") },
-                        shape = RoundedCornerShape(11.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .background(Color(0xFD9BAFF))
-                            .padding(horizontal = 8.dp),
-                        textStyle = TextStyle(
+                    Text(
+                        text = "Ketikkan email dibawah ini untuk mengulang kata sandi.",
+                        style = TextStyle(
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
-                            fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Gray
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
-                        keyboardOptions = KeyboardOptions.Default,
-                        keyboardActions = KeyboardActions.Default
+                        modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(38.dp))
+
 
                     TextField(
                         value = "",
@@ -146,47 +167,17 @@ fun registerScreen() {
                             fontSize = 18.sp,
                             color = Color(0xF7C19B9)
                         ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color(0xFFD9BAFF),
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
-
-                    TextField(
-                        value = "",
-                        onValueChange = { /* Handle password input */ },
-                        placeholder = { Text("Kata Sandi") },
-                        shape = RoundedCornerShape(11.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .padding(horizontal = 8.dp),
-                        textStyle = TextStyle(
-                            fontFamily = Poppins,
-                            fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
-                        ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
-                        keyboardOptions = KeyboardOptions.Default,
-                        keyboardActions = KeyboardActions.Default,
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "",
-                                tint = Color(0xF661599)
-                            )
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(55.dp))
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { /* Handle send action */ },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -194,7 +185,7 @@ fun registerScreen() {
                         shape = RoundedCornerShape(50.dp)
                     ) {
                         Text(
-                            text = "Daftar",
+                            text = "Kirim",
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontFamily = Poppins,
@@ -203,47 +194,17 @@ fun registerScreen() {
                             )
                         )
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Sign Up Text
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(
-                            text = "Sudah punya akun?",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Normal,
-                                color = Color.Black
-                            )
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Masuk",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF661599)
-                            )
-                        )
-                    }
                 }
             }
 
-
-
             Image(
-                painter = painterResource(id = R.drawable.ic_maskot_jempol),
+                painter = painterResource(id = R.drawable.ic_maskot_sedih),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(263.dp)
                     .align(Alignment.Center)
-                    .offset(y = -205.dp)
-                    .offset(x = 16.dp)
+                    .offset(y = -142.dp)
             )
         }
     }
@@ -251,8 +212,9 @@ fun registerScreen() {
 
 
 
+
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
-fun registerScreenPreview() {
-    registerScreen()
+fun resetPasswordScreenPreview() {
+    ResetPasswordScreen()
 }
