@@ -9,11 +9,10 @@ import com.example.oneupfarm.ui.theme.OneUpFarmTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         installSplashScreen()
 
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             OneUpFarmTheme {
                 OneUpFarm()

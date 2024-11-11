@@ -94,7 +94,7 @@ fun OUFBottomBar(navController: NavController, modifier: Modifier = Modifier) {
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_plant),
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }

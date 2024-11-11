@@ -1,4 +1,4 @@
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -35,10 +35,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.theme.OneUpFarmTheme
 
 
@@ -53,7 +53,7 @@ class ProfilePage : ComponentActivity() {
         setContent {
             OneUpFarmTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ProfilePageScreen(modifier = Modifier.padding(innerPadding))
+                    ProfileScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -61,13 +61,11 @@ class ProfilePage : ComponentActivity() {
 }
 
 @Composable
-fun ProfilePageScreen(modifier: Modifier = Modifier) {
-    Surface(color = Color(0xFFF4EFF8)) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            WelcomeMessage()
-            CharacterDetail()
-            StatisticTab()
-        }
+fun ProfileScreen(modifier: Modifier = Modifier) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        WelcomeMessage()
+        CharacterDetail()
+        StatisticTab()
     }
 }
 
@@ -183,7 +181,7 @@ fun AvatarCard() {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(R.drawable.pixelguy),
+                painter = painterResource(R.drawable.ic_avatar_cowo),
                 contentDescription = null,
                 modifier = Modifier
                     .size(96.dp)
@@ -199,7 +197,7 @@ fun AvatarCard() {
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
             )
         }
         Surface(
@@ -318,13 +316,5 @@ fun BadgeTab() {
         ) {
 
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfilePagePreview() {
-    OneUpFarmTheme {
-        ProfilePageScreen()
     }
 }

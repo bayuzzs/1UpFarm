@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,6 +18,7 @@ import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.navigation.getCurrentRoute
 import com.example.oneupfarm.ui.screen.ChooseGenderScreen
 import com.example.oneupfarm.ui.screen.LoginScreen
+import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.RegisterScreen
 import com.example.oneupfarm.ui.screen.ResetPasswordScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
@@ -56,7 +58,7 @@ fun OneUpFarm(
             startDestination = Screen.Welcome.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Profile.route) { Text("Profile Page") }
+            composable(Screen.Profile.route) { ProfileScreen() }
             composable(Screen.Calendar.route) { Text("Calendar Page") }
             composable(Screen.MarketPlace.route) { Text("MarketPlace Page") }
             composable(Screen.Register.route) { RegisterScreen(navController = navController) }
