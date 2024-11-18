@@ -70,7 +70,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+                    .offset(y = 95.dp)
             )
 
             Box(
@@ -92,15 +92,13 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                     Text(
                         text = "Halo,",
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
                         ),
                         modifier = Modifier.align(Alignment.Start)
                     )
-
-                    Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
                         text = "Daftar Sekarang!",
@@ -113,7 +111,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
                         value = "",
@@ -137,7 +135,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
                         value = "",
@@ -161,7 +159,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
                         value = "",
@@ -191,7 +189,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
                         onClick = { navController.navigate(Screen.ChooseGender.route) },
@@ -248,9 +246,9 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(263.dp)
+                    .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -205.dp)
+                    .offset(y = -190.dp)
                     .offset(x = 16.dp)
             )
         }

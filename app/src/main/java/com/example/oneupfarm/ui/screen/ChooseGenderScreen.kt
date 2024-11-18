@@ -47,7 +47,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+                    .offset(y = 95.dp)
             )
 
             Box(
@@ -61,13 +61,13 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, top = 56.dp),
+                        .padding(start = 30.dp, end = 30.dp, top = 54.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Avatar menyesuaikan gendermu,",
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -88,7 +88,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
                     Row(
                         modifier = Modifier
@@ -98,12 +98,12 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                         // Male avatar selection
                         Box(
                             modifier = Modifier
-                                .width(160.dp)
-                                .height(224.dp)
+                                .width(140.dp)
+                                .height(200.dp)
                                 .clip(RoundedCornerShape(22.dp))
                                 .background(maleBackgroundColor)
                                 .clickable { selectedAvatarIndex = 0 }
-                                .padding(16.dp),
+                                .padding(10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
@@ -115,23 +115,23 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
 
                         Box(
                             modifier = Modifier
-                                .width(160.dp)
-                                .height(224.dp)
+                                .width(140.dp)
+                                .height(200.dp)
                                 .clip(RoundedCornerShape(22.dp))
                                 .background(femaleBackgroundColor)
                                 .clickable { selectedAvatarIndex = 1 }
-                                .padding(16.dp),
+                                .padding(10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
                                 painter = painterResource(id = if (selectedAvatarIndex == 1) R.drawable.ic_avatar_cewe else R.drawable.ic_avatar_cewe_bnw),
                                 contentDescription = "Female Avatar",
-                                modifier = Modifier.size(150.dp)
+                                modifier = Modifier.size(140.dp)
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(62.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
                         onClick = { /* Handle action for selected avatar */ },
@@ -177,9 +177,9 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .size(263.dp)
+                .size(243.dp)
                 .align(Alignment.Center)
-                .offset(y = -205.dp)
+                .offset(y = -195.dp)
                 .offset(x = -16.dp)
         )
     }

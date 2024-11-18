@@ -67,13 +67,13 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 74.dp)
+                    .padding(horizontal = 32.dp, vertical = 45.dp)
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = { /* Handle back action */ },
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(42.dp)
                         .clip(CircleShape)
                         .background(Color.White)
                 ) {
@@ -87,7 +87,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                 }
                 IconButton(onClick = { /* Handle close action */ },
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(42.dp)
                         .clip(CircleShape)
                         .background(Color.White)
                 ) {
@@ -107,7 +107,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+                    .offset(y = 95.dp)
             )
 
             Box(
@@ -121,13 +121,13 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, top = 46.dp),
+                        .padding(start = 30.dp, end = 30.dp, top = 40.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Halo,",
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -135,12 +135,10 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
                     Text(
                         text = "Daftar Kembali!",
                         style = TextStyle(
-                            fontSize = 36.sp,
+                            fontSize = 32.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
@@ -148,12 +146,10 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-
                     Text(
                         text = "Masukkan kata sandi baru dibawah ini.",
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -161,7 +157,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
                         value = "",
@@ -185,7 +181,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
                         value = "",
@@ -216,7 +212,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
                         value = "",
@@ -246,7 +242,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
                         onClick = { /*TODO*/ },
@@ -271,14 +267,15 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                 }
             }
 
+
             Image(
                 painter = painterResource(id = R.drawable.ic_maskot_jempol),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(263.dp)
+                    .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -205.dp)
+                    .offset(y = -185.dp)
                     .offset(x = 16.dp)
             )
         }
