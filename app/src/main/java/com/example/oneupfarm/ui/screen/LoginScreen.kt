@@ -71,7 +71,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 225.dp)
+                    .offset(y = 150.dp)
             )
 
             Box(
@@ -86,14 +86,14 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, top = 46.dp),
+                        .padding(start = 30.dp, end = 30.dp, top = 40.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Welcome text
                     Text(
                         text = "Halo,",
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -114,7 +114,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
                         value = "",
@@ -174,7 +174,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                     Text(
                         text = "Lupa Password?",
                         style = TextStyle(
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF661599)
@@ -183,7 +183,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                             .padding(end = 15.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(44.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
                         onClick = { navController.navigate(Screen.Profile.route) },
@@ -204,7 +204,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     Row(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -237,9 +237,9 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(263.dp)
+                    .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -142.dp)
+                    .offset(y = -132.dp)
             )
         }
     }

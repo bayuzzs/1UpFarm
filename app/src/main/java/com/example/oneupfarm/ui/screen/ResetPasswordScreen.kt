@@ -68,13 +68,13 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 74.dp)
+                    .padding(horizontal = 32.dp, vertical = 45.dp)
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { /* Handle close action */ },
                     modifier = Modifier
-                        .size(62.dp)
+                        .size(42.dp)
                         .clip(CircleShape)
                         .background(Color.White)
                 ) {
@@ -94,7 +94,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 225.dp)
+                    .offset(y = 150.dp)
             )
 
             Box(
@@ -109,21 +109,19 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, top = 56.dp),
+                        .padding(start = 30.dp, end = 30.dp, top = 50.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Yah,",
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
                         ),
                         modifier = Modifier.align(Alignment.Start)
                     )
-
-                    Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
                         text = "Lupa password?",
@@ -141,7 +139,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                     Text(
                         text = "Ketikkan email dibawah ini untuk mengulang kata sandi.",
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontFamily = Poppins,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray
@@ -149,7 +147,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.align(Alignment.Start)
                     )
 
-                    Spacer(modifier = Modifier.height(38.dp))
+                    Spacer(modifier = Modifier.height(42.dp))
 
 
                     TextField(
@@ -174,7 +172,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(55.dp))
+                    Spacer(modifier = Modifier.height(60.dp))
 
                     Button(
                         onClick = { /* Handle send action */ },
@@ -202,9 +200,9 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(263.dp)
+                    .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -142.dp)
+                    .offset(y = -132.dp)
             )
         }
     }
