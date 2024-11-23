@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.oneupfarm.ui.screen.AddPlantScreen
+import com.example.oneupfarm.ui.screen.PlantMonitoringScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
 
@@ -30,5 +31,11 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
         popExitTransition = { slideOutTransitionPop() }
     ) {
         AddPlantScreen(navController, onClose = { navController.popBackStack() })
+    }
+
+    composable(Screen.PlantMonitoring.route) {
+        PlantMonitoringScreen(
+            navController = navController,
+            onClose = {})
     }
 }
