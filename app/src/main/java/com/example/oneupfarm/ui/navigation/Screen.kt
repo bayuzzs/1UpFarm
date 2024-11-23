@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     data object TrackPlant : Screen("track_plant")
     data object MarketPlace : Screen("marketplace")
     data object Calendar : Screen("calendar")
+    data object PlantMonitoring: Screen("plant_monitoring")
 
     //    contoh klo ada route parameter
 //    data class Test(val userId: String) : Screen("profile/{userId}") {
