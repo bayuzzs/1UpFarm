@@ -16,7 +16,7 @@ fun OneUpFarm(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.TrackPlant.route,
+        startDestination = Screen.Welcome.route,
         modifier = modifier
     ) {
         // Auth Flow

@@ -72,7 +72,7 @@ object DataSource {
     )
 
     val dummyBadge: List<Badge> = listOf(
-        Badge(1, R.drawable.badge1, "Penguasaan Mudah"),
-        Badge(2, R.drawable.badge2, "Penguasaan Sedang")
+        Badge(1, R.drawable.ic_badge_easy, "Penguasaan Mudah"),
+        Badge(2, R.drawable.ic_badge_medium, "Penguasaan Sedang")
     )
 }

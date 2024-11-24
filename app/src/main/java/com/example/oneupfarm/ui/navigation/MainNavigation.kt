@@ -7,11 +7,12 @@ import androidx.navigation.compose.composable
 import com.example.oneupfarm.ui.screen.AddPlantScreen
 import com.example.oneupfarm.ui.screen.PlantMonitoringScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
+import com.example.oneupfarm.ui.screen.SettingsScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
 
 fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
     composable(Screen.Profile.route) {
-        ProfileScreen()
+        ProfileScreen(navController = navController)
     }
     composable(Screen.Calendar.route) {
         Text("Calendar Page")
@@ -21,6 +22,9 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
     }
     composable(Screen.TrackPlant.route) {
         TrackPlantScreen(navController = navController)
+    }
+    composable(Screen.Settings.route) {
+        SettingsScreen(navController = navController)
     }
 
     composable(

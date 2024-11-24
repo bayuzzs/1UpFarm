@@ -70,7 +70,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+//                    .offset(y = 145.dp)
             )
 
             Box(

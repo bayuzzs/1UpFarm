@@ -59,7 +59,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
     Scaffold(
         bottomBar = {
             OUFBottomBar(navController = navController,
-            modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues())
+            modifier = Modifier
         )
         }
     ) { innerPadding ->
