@@ -145,7 +145,12 @@ fun PlantMonitoringScreen(navController: NavHostController, onClose: () -> Unit)
                             text = "Penanaman Tanpa Tanah - Hidroponik",
                         )
                         Spacer(modifier = Modifier.height(24.dp))
-                        PlantForecast("5 Januari 2024", "5 Februari 2024")
+                        PlantForecast(
+                            leftTitle = "Waktu Tanam",
+                            leftDescription = "5 Januari 2024",
+                            rightTitle = "Waktu Panen",
+                            rightDescription = "5 Februari 2024"
+                        )
                         Text(
                             text = "Status: Sedang Berjalan",
                             textAlign = TextAlign.Center,

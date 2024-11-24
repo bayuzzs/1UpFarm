@@ -61,7 +61,7 @@ fun TrackPlantScreen(
         bottomBar = { OUFBottomBar(navController = navController) },
         floatingActionButton = {
             AddPlant(onClick = {
-                navController.navigate(Screen.AddPlantChoosePlace.route) {
+                navController.navigate(Screen.AddPlant.route) {
 
                 }
             })

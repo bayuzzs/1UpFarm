@@ -33,6 +33,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -67,16 +68,16 @@ fun PlantEducation(isVisible: MutableState<Boolean>, plantEducations: List<Plant
                 Button(
                     onClick = { isVisible.value = false },
                     contentPadding = PaddingValues(16.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Black.copy(alpha = 0.2f)),
+                    colors = ButtonDefaults.buttonColors(Color.Black.copy(alpha = 0.5f)),
                     shape = CircleShape,
                     modifier = Modifier
                         .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
-                        .border(2.dp, Color.White.copy(alpha = 0.7f), CircleShape)
+                        .border(2.dp, Color.White.copy(alpha = 0.9f), CircleShape)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "close",
-                        tint = Color.White.copy(alpha = 0.8f),
+                        tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
                 }

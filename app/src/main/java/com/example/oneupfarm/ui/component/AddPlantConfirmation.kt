@@ -170,53 +170,12 @@ fun AddPlantConfirmation(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(
-                            "Pada Hari ini",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            "5 Jan 2024",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.W400
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .size(32.dp)
-                    )
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        Text(
-                            "Prediksi Panen",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            "5 Jan 2024",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.W400
-                        )
-                    }
-                }
+                PlantForecast(
+                    leftTitle = "Pada Hari ini",
+                    leftDescription = "27 Mei 2024",
+                    rightTitle = "Prediksi Panen",
+                    rightDescription = "05 Oktober 2024"
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
 

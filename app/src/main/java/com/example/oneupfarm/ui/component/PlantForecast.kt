@@ -23,7 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PlantForecast(plantDate: String, harvestDate: String) {
+fun PlantForecast(
+    leftTitle: String,
+    leftDescription: String,
+    rightTitle: String,
+    rightDescription: String
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
@@ -33,18 +38,17 @@ fun PlantForecast(plantDate: String, harvestDate: String) {
             .fillMaxWidth()
             .padding(12.dp)
     ) {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                "Tanggal Tanam",
+                leftTitle,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                plantDate,
+                leftDescription,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.W400
             )
@@ -61,12 +65,12 @@ fun PlantForecast(plantDate: String, harvestDate: String) {
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
-                "Prediksi Panen",
+                rightTitle,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                harvestDate,
+                rightDescription,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.W400
             )

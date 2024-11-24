@@ -171,7 +171,7 @@ fun AddPlantScreen(
             }
         }
 
-        AddPlantConfirmation(showConfirmation, onNavigateToNextScreen = {navController.navigate(Screen.Asal.route)})
+        AddPlantConfirmation(showConfirmation, onNavigateToNextScreen = {navController.navigate(Screen.Profile.route)})
 
     }
 }
