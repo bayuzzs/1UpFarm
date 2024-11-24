@@ -13,6 +13,8 @@ sealed class Screen(val route: String) {
     data object AddPlant : Screen("add_plant")
     data object PlantMonitoring: Screen("plant_monitoring")
 
+    data object Settings : Screen("settings")
+
     //    contoh klo ada route parameter
 //    data class Test(val userId: String) : Screen("profile/{userId}") {
 //        fun createRoute(userId: String) = "profile/$userId"

@@ -4,6 +4,7 @@ import com.example.oneupfarm.model.NavigationItem
 import com.example.oneupfarm.R
 import com.example.oneupfarm.model.ChoosePlant
 import com.example.oneupfarm.model.PlantEducation
+import com.example.oneupfarm.model.Badge
 
 object DataSource {
     val navigationItems: List<NavigationItem> = listOf(
@@ -68,5 +69,10 @@ object DataSource {
             "Pupuk yang dihasilkan dari hasil fermentasi kotoran hewan, seperti sapi, kambing, atau ayam, dalam bentuk cair. Proses fermentasi ini melibatkan penambahan air dan kadang-kadang bahan tambahan lainnya untuk mempercepat penguraian. Pupuk kandang cair kaya akan nitrogen, fosfor, dan kalium, serta mengandung mikroorganisme baik yang dapat meningkatkan kesuburan tanah.",
             R.drawable.liquid_manure_illustration
         )
+    )
+
+    val dummyBadge: List<Badge> = listOf(
+        Badge(1, R.drawable.badge1, "Penguasaan Mudah"),
+        Badge(2, R.drawable.badge2, "Penguasaan Sedang")
     )
 }

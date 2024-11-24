@@ -24,6 +24,5 @@ fun OneUpFarm(
 
         // Main Flow
         mainNavigation(navController)
-
     }
 }
