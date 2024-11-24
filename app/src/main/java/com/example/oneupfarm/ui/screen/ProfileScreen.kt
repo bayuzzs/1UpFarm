@@ -1,9 +1,5 @@
 package com.example.oneupfarm.ui.screen
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,126 +8,82 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import com.example.oneupfarm.R
-import com.example.oneupfarm.ui.theme.OneUpFarmTheme
+import com.example.oneupfarm.data.DataSource
+import com.example.oneupfarm.model.Badge
+import com.example.oneupfarm.ui.component.BadgeCard
+import com.example.oneupfarm.ui.component.OUFBottomBar
+import com.example.oneupfarm.ui.navigation.Screen
 
-
-class ProfilePage : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-        installSplashScreen()
-        setTheme(R.style.Theme_OneUpFarm)
-
-        setContent {
-            OneUpFarmTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ProfileScreen(modifier = Modifier.padding(innerPadding))
-                }
+@Composable
+fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
+    Scaffold(
+        bottomBar = {
+            OUFBottomBar(navController = navController,
+            modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues())
+        )
+        }
+    ) { innerPadding ->
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            item {
+                ProfileTopBar(navController = navController)
+            }
+            item {
+                CharacterDetail(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+            item {
+                StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+            item {
+                BadgeTab(DataSource.dummyBadge, modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
     }
 }
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        WelcomeMessage()
-        CharacterDetail()
-        StatisticTab()
-    }
-}
-
-@Composable
-fun WelcomeMessage() {
+fun CharacterDetail(modifier: Modifier = Modifier) {
     Surface(
-        color = Color(0xFF9651E8),
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(
-                top = 60.dp,
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 16.dp
-            )
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Halooo!",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.End)
-                ) {
-                    IconButton(onClick = {/*TO DO*/ }) {
-                        Icon(
-                            painter = painterResource(R.drawable.gameicon),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                    IconButton(onClick = {/*TO DO*/ }) {
-                        Icon(
-                            painter = painterResource(R.drawable.bellicon),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                    IconButton(onClick = {/*TO DO*/ }) {
-                        Icon(
-                            painter = painterResource(R.drawable.gearicon),
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
-            Text(
-                text = "Ayo merawat tanaman!",
-                color = Color.White,
-                fontSize = 16.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun CharacterDetail() {
-    Surface(
-        modifier = Modifier.padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp),
+        modifier = modifier.padding(bottom = 16.dp),
         shape = RoundedCornerShape(
             topStart = 0.dp,
             topEnd = 0.dp,
@@ -147,7 +99,7 @@ fun CharacterDetail() {
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 IconWithProgress(
-                    iconRes = R.drawable.hearticon,
+                    iconRes = R.drawable.ic_heart,
                     iconTint = Color(0xFFFD0136),
                     hasProgressIndicator = true,
                     progressValue = 0.7f
@@ -159,7 +111,7 @@ fun CharacterDetail() {
                     progressValue = 0.3f
                 )
                 IconWithProgress(
-                    iconRes = R.drawable.goldicon,
+                    iconRes = R.drawable.ic_gold,
                     iconTint = Color(0xFFFFCA28),
                     hasProgressIndicator = false,
                     progressValue = 1000.0f
@@ -266,21 +218,24 @@ fun IconWithProgress(
 }
 
 @Composable
-fun StatisticTab() {
-    Column(modifier = Modifier.padding(16.dp)) {
+fun StatisticTab(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Text(
             text = "Statistik",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(start = 8.dp)
+            color = Color.Black
         )
         Surface(
             color = Color.White,
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(20.dp)) {
+            Column(modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth()) {
                 Text(
                     text = "Produktivitas",
                     fontSize = 18.sp,
@@ -300,21 +255,110 @@ fun StatisticTab() {
 }
 
 @Composable
-fun BadgeTab() {
-    Column(modifier = Modifier.padding(16.dp)) {
+fun BadgeTab(
+    badgeList: List<Badge>,
+    modifier: Modifier = Modifier
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    val columns = when {
+        screenWidthDp < 600 -> 3
+        screenWidthDp < 840 -> 4
+        else -> 6
+    }
+
+    Column(modifier = modifier.padding(vertical = 16.dp)) {
         Text(
             text = "Lencana",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier
         )
-        Surface(
-            color = Color.White,
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.padding(top = 16.dp)
+        Card(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            )
         ) {
-
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columns),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .heightIn(max = 1000.dp)
+            ) {
+                items(badgeList) { badge ->
+                    BadgeCard(badge)
+                }
+            }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileTopBar(modifier: Modifier = Modifier, navController: NavController) {
+    MediumTopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent
+        ),
+        modifier = modifier.background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFF7C19B9),
+                    Color(0xFF9651E8)
+                )
+            )
+        ),
+        title = {
+            Text(
+                text = "Ayo merawat tanaman!",
+                color = Color.White,
+                fontSize = 16.sp
+            )
+        },
+        navigationIcon = {
+            Text(
+                text = "Halooo!",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(start = 12.dp, top = 24.dp)
+            )
+        },
+        actions = {
+            IconButton(
+                onClick = {/*TO DO*/ },
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_game),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+            IconButton(
+                onClick = {/*TO DO*/ },
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_bell),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+            IconButton(
+                onClick = {navController.navigate(Screen.Settings.route)},
+                modifier = Modifier.padding(top = 24.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_gear),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
+    )
 }

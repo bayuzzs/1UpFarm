@@ -19,8 +19,11 @@ import com.example.oneupfarm.ui.navigation.getCurrentRoute
 import com.example.oneupfarm.ui.screen.ChooseGenderScreen
 import com.example.oneupfarm.ui.screen.LoginScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
+import com.example.oneupfarm.ui.screen.ProfileTopBar
 import com.example.oneupfarm.ui.screen.RegisterScreen
 import com.example.oneupfarm.ui.screen.ResetPasswordScreen
+import com.example.oneupfarm.ui.screen.SettingsScreen
+import com.example.oneupfarm.ui.screen.SettingsTopBar
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
 import com.example.oneupfarm.ui.screen.WelcomeScreen
 
@@ -40,6 +43,7 @@ fun OneUpFarm(
     )
 
     val topBarContent: @Composable (() -> Unit)? = when (currentRoute) {
+        "settings" -> {{ SettingsTopBar(navController = navController) }}
         else -> null
     }
 
@@ -58,7 +62,7 @@ fun OneUpFarm(
             startDestination = Screen.Welcome.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Profile.route) { ProfileScreen() }
+            composable(Screen.Profile.route) { ProfileScreen(navController = navController) }
             composable(Screen.Calendar.route) { Text("Calendar Page") }
             composable(Screen.MarketPlace.route) { Text("MarketPlace Page") }
             composable(Screen.Register.route) { RegisterScreen(navController = navController) }
@@ -67,6 +71,8 @@ fun OneUpFarm(
             composable(Screen.ChooseGender.route) { ChooseGenderScreen(navController = navController) }
             composable(Screen.ResetPassword.route) { ResetPasswordScreen(navController = navController) }
             composable(Screen.TrackPlant.route) { TrackPlantScreen(navController = navController) }
+
+            composable(Screen.Settings.route) { SettingsScreen() }
         }
     }
 
