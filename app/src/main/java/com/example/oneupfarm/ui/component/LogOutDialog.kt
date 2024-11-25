@@ -59,7 +59,7 @@ fun LogOutDialog(
                         .background(Color(0xFFD9BAFF))
                 )
                 Image(
-                    painter = painterResource(R.drawable.ic_maskot_sedih),
+                    painter = painterResource(R.drawable.sadmascot),
                     contentDescription = null,
                     modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                         .size(120.dp)

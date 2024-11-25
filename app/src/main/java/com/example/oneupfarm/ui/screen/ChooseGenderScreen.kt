@@ -26,7 +26,7 @@ import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 
 @Composable
-fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
+fun ChooseGenderScreen(navController: NavController) {
     // Track which avatar is selected
     var selectedAvatarIndex by remember { mutableStateOf<Int?>(null) }
 
@@ -189,5 +189,5 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun GenderScreenPreview() {
-    ChooseGenderScreen()
+    ChooseGenderScreen(navController = rememberNavController())
 }

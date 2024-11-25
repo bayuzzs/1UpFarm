@@ -56,7 +56,7 @@ import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 
 @Composable
-fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
+fun ResetPasswordScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
 
     OUFBackground(modifier = Modifier.fillMaxSize()) {
@@ -183,7 +183,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                         keyboardActions = KeyboardActions.Default
                     )
 
-                    Spacer(modifier = Modifier.height(60.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
                     Button(
                         onClick = { navController.navigate(Screen.NewPassword.route) },
@@ -225,5 +225,5 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun ResetPasswordScreenPreview() {
-    ResetPasswordScreen()
+    ResetPasswordScreen(navController = rememberNavController())
 }

@@ -37,11 +37,9 @@ import com.example.oneupfarm.ui.theme.purple900
 import com.example.oneupfarm.ui.theme.white
 
 
-
-
 @Composable
 fun WelcomeScreen(
-    navController: NavController= rememberNavController(),
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
@@ -80,11 +78,11 @@ fun WelcomeScreen(
             Text(
                 text = "Tanam berbagai tanaman,\n selesaikan misi harian, dan dapatkan poin untuk naik level!",
                 style = TextStyle(
-                fontSize = 18.sp,
-                fontFamily = Poppins,
-                color = Color.White,
-                fontWeight = Medium,
-                textAlign = TextAlign.Center,
+                    fontSize = 18.sp,
+                    fontFamily = Poppins,
+                    color = Color.White,
+                    fontWeight = Medium,
+                    textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
                     .fillMaxWidth(0.95f)
@@ -97,7 +95,8 @@ fun WelcomeScreen(
                 onClick = { navController.navigate(Screen.Login.route) },
                 shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = white),
+                    containerColor = white
+                ),
                 modifier = Modifier
                     .fillMaxWidth(0.95f)
                     .padding(vertical = 4.dp)
@@ -112,7 +111,7 @@ fun WelcomeScreen(
                         color = purple900
                     )
 
-                    )
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -122,17 +121,19 @@ fun WelcomeScreen(
                 shape = RoundedCornerShape(24.dp),
                 border = BorderStroke(2.dp, Color.White),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = purple900),
+                    containerColor = purple900
+                ),
                 modifier = Modifier
                     .fillMaxWidth(0.95f)
                     .padding(vertical = 4.dp)
                     .height(56.dp)
-            ){
-                Text(text = "Daftar",
+            ) {
+                Text(
+                    text = "Daftar",
                     style = TextStyle(
-                    fontSize = 24.sp,
-                    fontFamily = Poppins,
-                    fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Bold,
                     )
                 )
             }
@@ -145,5 +146,5 @@ fun WelcomeScreen(
 @Preview(showBackground = true)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    WelcomeScreen(navController = rememberNavController())
 }

@@ -54,7 +54,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
         innerPadding ->
         Column(modifier = modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
             AccountCard(
-                avatarImage = R.drawable.ic_avatar_cowo,
+                avatarImage = R.drawable.boyavatar,
                 name = "Khelfa Zacky",
                 email = "jakianjay091@gmail.com",
                 modifier = Modifier.padding(16.dp)

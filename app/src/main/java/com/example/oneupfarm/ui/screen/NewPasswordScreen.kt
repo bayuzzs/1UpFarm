@@ -52,6 +52,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
@@ -62,7 +63,7 @@ import com.example.oneupfarm.ui.navigation.Screen
 
 
 @Composable
-fun NewPasswordScreen(navController: NavController= rememberNavController()) {
+fun NewPasswordScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
@@ -82,7 +83,8 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { navController.navigate(Screen.ResetPassword.route) },
+                IconButton(
+                    onClick = { navController.navigate(Screen.ResetPassword.route) },
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
@@ -96,7 +98,8 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.size(28.dp)
                     )
                 }
-                IconButton(onClick = { navController.navigate(Screen.Login.route) },
+                IconButton(
+                    onClick = { navController.navigate(Screen.Login.route) },
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
@@ -199,8 +202,8 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                             unfocusedIndicatorColor = Color.Transparent,
                             unfocusedContainerColor = Color(0xFFD9BAFF),
                             focusedContainerColor = Color(0xFFD9BAFF)
-                            ),
-                        keyboardOptions = KeyboardOptions.Default,
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
 
@@ -235,11 +238,12 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                             unfocusedContainerColor = Color(0xFFD9BAFF),
                             focusedContainerColor = Color(0xFFD9BAFF)
                         ),
-                        keyboardOptions = KeyboardOptions.Default,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                            val icon =
+                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
@@ -282,11 +286,12 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                             unfocusedContainerColor = Color(0xFFD9BAFF),
                             focusedContainerColor = Color(0xFFD9BAFF)
                         ),
-                        keyboardOptions = KeyboardOptions.Default,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions.Default,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                            val icon =
+                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
@@ -339,9 +344,8 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
 }
 
 
-
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun NewPasswordScreenPreview() {
-    NewPasswordScreen()
+    NewPasswordScreen(navController = rememberNavController())
 }

@@ -60,7 +60,7 @@ import com.example.oneupfarm.ui.navigation.Screen
 
 
 @Composable
-fun LoginScreen(navController: NavController= rememberNavController()) {
+fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -295,5 +295,5 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
     @Preview(showBackground = true, widthDp = 412, heightDp = 917)
     @Composable
     fun LoginScreenPreview() {
-        LoginScreen()
+        LoginScreen(navController = rememberNavController())
     }
