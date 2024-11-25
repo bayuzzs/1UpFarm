@@ -4,7 +4,7 @@ package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,16 +13,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,23 +45,31 @@ import androidx.compose.ui.unit.sp
 import com.example.oneupfarm.ui.theme.Poppins
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.GradientBox
 import com.example.oneupfarm.R
-import com.example.oneupfarm.rememberImeState
 import com.example.oneupfarm.ui.navigation.Screen
 
 
 @Composable
 fun LoginScreen(navController: NavController= rememberNavController()) {
-    val isImeVisible by rememberImeState()
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .fillMaxSize(),
-                /* .fillMaxHeight(if (isImeVisible) 0f else 0.9f), */
+                .fillMaxSize()
+                .imePadding(),
+
         ) {
 
             Image(
@@ -82,14 +90,12 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                     .background(Color.White)
                     .align(Alignment.BottomCenter)
             ) {
-                // Adding content inside the white background
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 30.dp, end = 30.dp, top = 40.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Welcome text
                     Text(
                         text = "Halo,",
                         style = TextStyle(
@@ -117,22 +123,30 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle email input */ },
-                        placeholder = { Text("E-mail Kamu") },
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = {
+                            Text(
+                                text = "E-mail Kamu",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .background(Color(0xFD9BAFF))
                             .padding(horizontal = 8.dp),
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                         ),
                         keyboardOptions = KeyboardOptions.Default,
@@ -142,9 +156,18 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(18.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle password input */ },
-                        placeholder = { Text("Kata Sandi") },
+                        value = password,
+                        onValueChange = { password = it },
+                        placeholder = {
+                            Text(
+                                text = "Kata Sandi",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -153,22 +176,28 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                         ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
+                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "",
-                                tint = Color(0xF661599)
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color(0xFF661599),
+                                modifier = Modifier.clickable {
+                                    passwordVisible = !passwordVisible
+                                }
                             )
                         }
                     )
+
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
@@ -179,9 +208,13 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF661599)
                         ),
-                        modifier = Modifier.align(Alignment.End)
-                            .padding(end = 15.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
+                            .clickable { navController.navigate(Screen.ResetPassword.route) },
+                        textAlign = TextAlign.End
                     )
+
 
                     Spacer(modifier = Modifier.height(35.dp))
 
@@ -226,20 +259,24 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                                 fontFamily = Poppins,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF661599)
-                            )
+                            ),
+                            modifier = Modifier.clickable {
+                                navController.navigate(Screen.Register.route)
+                            }
                         )
+
                     }
                 }
             }
 
             Image(
-                painter = painterResource(id = R.drawable.ic_maskot_senyum),
+                painter = painterResource(id = R.drawable.basicmascot),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -132.dp)
+                    .offset(y = (-132).dp)
             )
         }
     }
@@ -249,6 +286,6 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
 
     @Preview(showBackground = true, widthDp = 412, heightDp = 917)
     @Composable
-    fun loginScreenPreview() {
+    fun LoginScreenPreview() {
         LoginScreen()
     }

@@ -133,7 +133,7 @@ fun AvatarCard() {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(R.drawable.ic_avatar_cowo),
+                painter = painterResource(R.drawable.boyavatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(96.dp)

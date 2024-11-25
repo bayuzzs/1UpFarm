@@ -4,6 +4,7 @@ package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,6 +32,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +43,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,20 +53,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.GradientBox
 import com.example.oneupfarm.R
-import com.example.oneupfarm.rememberImeState
 import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 
 
 @Composable
 fun RegisterScreen(navController: NavController = rememberNavController()) {
-    val isImeVisible by rememberImeState()
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            /* .fillMaxHeight(if (isImeVisible) 0f else 0.9f), */
         ) {
 
             Image(
@@ -112,22 +121,63 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                     Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle name input */ },
-                        placeholder = { Text("Nama Lengkap") },
+                        value = name,
+                        onValueChange = { name = it },
+                        placeholder = {
+                            Text(
+                                text = "Nama Lengkap",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .background(Color(0xFD9BAFF))
                             .padding(horizontal = 8.dp),
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions.Default
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    TextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = {
+                            Text(
+                                text = "E-mail Kamu",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
+                        shape = RoundedCornerShape(11.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .padding(horizontal = 8.dp),
+                        textStyle = TextStyle(
+                            fontFamily = Poppins,
+                            fontSize = 18.sp,
+                            color = Color(0xFF7C19B9)
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
                         keyboardOptions = KeyboardOptions.Default,
@@ -137,34 +187,18 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle email input */ },
-                        placeholder = { Text("E-mail Kamu") },
-                        shape = RoundedCornerShape(11.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .background(Color(0xFD9BAFF))
-                            .padding(horizontal = 8.dp),
-                        textStyle = TextStyle(
-                            fontFamily = Poppins,
-                            fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
-                        ),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        keyboardOptions = KeyboardOptions.Default,
-                        keyboardActions = KeyboardActions.Default
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    TextField(
-                        value = "",
-                        onValueChange = { /* Handle password input */ },
-                        placeholder = { Text("Kata Sandi") },
+                        value = password,
+                        onValueChange = { password = it },
+                        placeholder = {
+                            Text(
+                                text = "Kata Sandi",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -173,19 +207,26 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
                         ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
+                        visualTransformation =
+                        if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
+                            val icon =
+                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "",
-                                tint = Color(0xF661599)
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color(0xFF661599),
+                                modifier = Modifier.clickable {
+                                    passwordVisible = !passwordVisible
+                                }
                             )
                         }
                     )
@@ -213,7 +254,6 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Sign Up Text
                     Row(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     ) {
@@ -234,22 +274,23 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                                 fontFamily = Poppins,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF661599)
-                            )
+                            ),
+                            modifier = Modifier.clickable {
+                                navController.navigate(Screen.Login.route)
+                            }
                         )
                     }
                 }
             }
 
-
-
             Image(
-                painter = painterResource(id = R.drawable.ic_maskot_jempol),
+                painter = painterResource(id = R.drawable.nicemascot),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -190.dp)
+                    .offset(y = (-190).dp)
                     .offset(x = 16.dp)
             )
         }
@@ -259,6 +300,6 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
-fun registerScreenPreview() {
+fun RegisterScreenPreview() {
     RegisterScreen()
 }

@@ -4,6 +4,7 @@ package com.example.oneupfarm.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -46,22 +48,29 @@ import com.example.oneupfarm.ui.theme.Poppins
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.GradientBox
 import com.example.oneupfarm.R
-import com.example.oneupfarm.rememberImeState
+import com.example.oneupfarm.ui.navigation.Screen
 
 
 @Composable
 fun NewPasswordScreen(navController: NavController= rememberNavController()) {
-    val isImeVisible by rememberImeState()
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            /* .fillMaxHeight(if (isImeVisible) 0f else 0.9f), */
         ) {
 
             Row(
@@ -71,7 +80,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { /* Handle back action */ },
+                IconButton(onClick = { navController.navigate(Screen.ResetPassword.route) },
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
@@ -85,7 +94,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         modifier = Modifier.size(28.dp)
                     )
                 }
-                IconButton(onClick = { /* Handle close action */ },
+                IconButton(onClick = { navController.navigate(Screen.Login.route) },
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
@@ -160,22 +169,30 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(25.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle email input */ },
-                        placeholder = { Text("E-mail Kamu") },
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = {
+                            Text(
+                                text = "E-mail Kamu",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .background(Color(0xFD9BAFF))
                             .padding(horizontal = 8.dp),
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
@@ -184,30 +201,44 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle email input */ },
-                        placeholder = { Text("Kata Sandi Baru") },
+                        value = password,
+                        onValueChange = { password = it },
+                        placeholder = {
+                            Text(
+                                text = "Kata Sandi Baru",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .background(Color(0xFD9BAFF))
                             .padding(horizontal = 8.dp),
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
+                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "",
-                                tint = Color(0xF661599)
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color(0xFF661599),
+                                modifier = Modifier.clickable {
+                                    passwordVisible = !passwordVisible
+                                }
                             )
                         }
                     )
@@ -215,9 +246,18 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle password input */ },
-                        placeholder = { Text("Konfirmasi Kata Sandi") },
+                        value = newPassword,
+                        onValueChange = { newPassword = it },
+                        placeholder = {
+                            Text(
+                                text = "Konfirmasi Kata Sandi",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -226,18 +266,24 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
-                            unfocusedIndicatorColor = Color.Transparent),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
+                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
-                                imageVector = Icons.Default.VisibilityOff,
-                                contentDescription = "",
-                                tint = Color(0xF661599)
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = Color(0xFF661599),
+                                modifier = Modifier.clickable {
+                                    passwordVisible = !passwordVisible
+                                }
                             )
                         }
                     )
@@ -245,7 +291,7 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate(Screen.Login.route) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -269,13 +315,13 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
 
 
             Image(
-                painter = painterResource(id = R.drawable.ic_maskot_jempol),
+                painter = painterResource(id = R.drawable.nicemascot),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -185.dp)
+                    .offset(y = (-185).dp)
                     .offset(x = 16.dp)
             )
         }
@@ -286,6 +332,6 @@ fun NewPasswordScreen(navController: NavController= rememberNavController()) {
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
-fun newPasswordScreenPreview() {
+fun NewPasswordScreenPreview() {
     NewPasswordScreen()
 }
