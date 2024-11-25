@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,15 +51,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.GradientBox
 import com.example.oneupfarm.R
-import com.example.oneupfarm.rememberImeState
+import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 
 @Composable
 fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
-    val isImeVisible by rememberImeState()
-    val (email, setEmail) = remember { mutableStateOf("") }
-    val (password, setPassword) = remember { mutableStateOf("") }
-    val (confirmPassword, setConfirmPassword) = remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
     GradientBox(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -72,7 +70,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                     .align(Alignment.TopCenter),
                 horizontalArrangement = Arrangement.End
             ) {
-                IconButton(onClick = { /* Handle close action */ },
+                IconButton(onClick = { navController.navigate(Screen.Login.route) },
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
@@ -151,22 +149,30 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
 
 
                     TextField(
-                        value = "",
-                        onValueChange = { /* Handle email input */ },
-                        placeholder = { Text("E-mail Kamu") },
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = {
+                            Text(
+                                text = "Email Kamu",
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontSize = 18.sp,
+                                    color = Color(0xFF7C19B9)
+                                )
+                            )
+                        },
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
-                            .background(Color(0xFD9BAFF))
                             .padding(horizontal = 8.dp),
                         textStyle = TextStyle(
                             fontFamily = Poppins,
                             fontSize = 18.sp,
-                            color = Color(0xF7C19B9)
+                            color = Color(0xFF7C19B9)
                         ),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFFD9BAFF),
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
@@ -175,7 +181,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                     Spacer(modifier = Modifier.height(60.dp))
 
                     Button(
-                        onClick = { /* Handle send action */ },
+                        onClick = { navController.navigate(Screen.NewPassword.route) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -196,13 +202,13 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
             }
 
             Image(
-                painter = painterResource(id = R.drawable.ic_maskot_sedih),
+                painter = painterResource(id = R.drawable.sadmascot),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(243.dp)
                     .align(Alignment.Center)
-                    .offset(y = -132.dp)
+                    .offset(y = (-132).dp)
             )
         }
     }
@@ -213,6 +219,6 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
-fun resetPasswordScreenPreview() {
+fun ResetPasswordScreenPreview() {
     ResetPasswordScreen()
 }

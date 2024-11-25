@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.GradientBox
 import com.example.oneupfarm.R
+import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
 
 @Composable
@@ -107,7 +108,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = if (selectedAvatarIndex == 0) R.drawable.ic_avatar_cowo else R.drawable.ic_avatar_cowo_bnw),
+                                painter = painterResource(id = if (selectedAvatarIndex == 0) R.drawable.boyavatar else R.drawable.boybnw),
                                 contentDescription = "Male Avatar",
                                 modifier = Modifier.size(150.dp)
                             )
@@ -124,7 +125,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = if (selectedAvatarIndex == 1) R.drawable.ic_avatar_cewe else R.drawable.ic_avatar_cewe_bnw),
+                                painter = painterResource(id = if (selectedAvatarIndex == 1) R.drawable.girlavatar else R.drawable.girlbnw),
                                 contentDescription = "Female Avatar",
                                 modifier = Modifier.size(140.dp)
                             )
@@ -134,7 +135,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
                     Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
-                        onClick = { /* Handle action for selected avatar */ },
+                        onClick = { navController.navigate(Screen.Profile.route) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -173,20 +174,20 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
         }
 
         Image(
-            painter = painterResource(id = R.drawable.ic_mascot_bingung),
+            painter = painterResource(id = R.drawable.confusedmascot),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(243.dp)
                 .align(Alignment.Center)
-                .offset(y = -195.dp)
-                .offset(x = -16.dp)
+                .offset(y = (-195).dp)
+                .offset(x = (-16).dp)
         )
     }
 }
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
-fun genderScreenPreview() {
+fun GenderScreenPreview() {
     ChooseGenderScreen()
 }
