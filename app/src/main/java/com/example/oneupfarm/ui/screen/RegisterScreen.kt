@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,16 +26,11 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,31 +39,37 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.oneupfarm.ui.theme.Poppins
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
-import com.example.oneupfarm.ui.theme.Poppins
 
 
 @Composable
-fun RegisterScreen(navController: NavController = rememberNavController()) {
+fun RegisterScreen(navController: NavController= rememberNavController()) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .imePadding(),
         ) {
 
             Image(
@@ -77,7 +79,7 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                 modifier = Modifier
                     .size(414.dp)
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp)
+                    .offset(y = 95.dp)
             )
 
             Box(
@@ -133,6 +135,7 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                                 )
                             )
                         },
+                        singleLine = true,
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -145,8 +148,10 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                         ),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
+                            ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
@@ -167,6 +172,7 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -178,9 +184,11 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                         ),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
                         ),
-                        keyboardOptions = KeyboardOptions.Default,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
 
@@ -200,6 +208,7 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -212,14 +221,14 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
                         ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
-                        visualTransformation =
-                        if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon =
-                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
@@ -296,6 +305,7 @@ fun RegisterScreen(navController: NavController = rememberNavController()) {
         }
     }
 }
+
 
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
