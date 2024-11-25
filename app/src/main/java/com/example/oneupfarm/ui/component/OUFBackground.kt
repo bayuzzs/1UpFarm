@@ -1,4 +1,4 @@
-package com.example.oneupfarm
+package com.example.oneupfarm.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -8,9 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.oneupfarm.R
 
 @Composable
-fun GradientBox(
+fun OUFBackground(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -32,7 +33,7 @@ fun GradientBox(
 @Preview(showBackground = true, widthDp = 412, heightDp = 917)
 @Composable
 fun GradientBoxPreview() {
-    GradientBox {
+    OUFBackground {
 
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,11 +48,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
 
@@ -63,10 +65,11 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .imePadding(),
         ) {
 
             Image(
@@ -132,6 +135,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                                 )
                             )
                         },
+                        singleLine = true,
                         shape = RoundedCornerShape(11.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -144,8 +148,11 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         ),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent),
-                        keyboardOptions = KeyboardOptions.Default,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
+                            ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
 
@@ -165,6 +172,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -176,8 +184,11 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         ),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent),
-                        keyboardOptions = KeyboardOptions.Default,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
 
@@ -197,6 +208,7 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -209,6 +221,8 @@ fun RegisterScreen(navController: NavController= rememberNavController()) {
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
                         ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,

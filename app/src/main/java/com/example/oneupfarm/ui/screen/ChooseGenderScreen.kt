@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
@@ -35,7 +35,7 @@ fun ChooseGenderScreen(navController: NavController = rememberNavController()) {
     val femaleBackgroundColor = if (selectedAvatarIndex == 1) Color(0xFFFFE4E1) else Color(0xFFF5F5F5)
 
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

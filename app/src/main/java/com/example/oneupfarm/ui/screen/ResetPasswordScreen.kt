@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.Poppins
@@ -58,9 +59,9 @@ import com.example.oneupfarm.ui.theme.Poppins
 fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
     var email by remember { mutableStateOf("") }
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().imePadding(),
         ) {
 
             Row(
@@ -162,6 +163,7 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -173,7 +175,10 @@ fun ResetPasswordScreen(navController: NavController= rememberNavController()) {
                         ),
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent),
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
+                            ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default
                     )

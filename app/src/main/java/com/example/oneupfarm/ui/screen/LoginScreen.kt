@@ -48,12 +48,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.GradientBox
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
 
@@ -64,7 +65,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
     var email by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,15 +73,16 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
 
         ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.ic_ellipse),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(414.dp)
-                    .align(Alignment.TopCenter)
-                    .offset(y = 150.dp)
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_ellipse),
+//                contentDescription = null,
+//                contentScale = ContentScale.Fit,
+//                modifier = Modifier
+//                    .background(Color.Black)
+//                    .fillMaxWidth()
+//                    .align(Alignment.TopCenter)
+//                    .offset(y = 180.dp)
+//            )
 
             Box(
                 modifier = Modifier
@@ -148,9 +150,12 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
                         ),
-                        keyboardOptions = KeyboardOptions.Default,
-                        keyboardActions = KeyboardActions.Default
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions.Default,
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(18.dp))
@@ -169,6 +174,7 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                             )
                         },
                         shape = RoundedCornerShape(11.dp),
+                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -181,6 +187,8 @@ fun LoginScreen(navController: NavController= rememberNavController()) {
                         colors = TextFieldDefaults.colors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = Color(0xFFD9BAFF),
+                            focusedContainerColor = Color(0xFFD9BAFF)
                         ),
                         keyboardOptions = KeyboardOptions.Default,
                         keyboardActions = KeyboardActions.Default,
