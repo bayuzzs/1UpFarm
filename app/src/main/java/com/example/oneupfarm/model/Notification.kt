@@ -7,13 +7,12 @@ data class Notification(
     @DrawableRes val plantImage: Int,
     val content: String,
     val plantName: String,
-
+    val timeStamp: String,
+    val notifType: NotifType,
+    val seen: Boolean
 )
 
-enum class NotificationTimeStamp {
-    TODAY, YESTERDAY, LAST_WEEK
-}
-
-enum class NotificationContent {
-
+enum class NotifType {
+    TODAY,
+    NOT_TODAY
 }

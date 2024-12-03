@@ -5,6 +5,8 @@ import com.example.oneupfarm.R
 import com.example.oneupfarm.model.ChoosePlant
 import com.example.oneupfarm.model.PlantEducation
 import com.example.oneupfarm.model.Badge
+import com.example.oneupfarm.model.NotifType
+import com.example.oneupfarm.model.Notification
 
 object DataSource {
     val navigationItems: List<NavigationItem> = listOf(
@@ -74,5 +76,12 @@ object DataSource {
     val dummyBadge: List<Badge> = listOf(
         Badge(1, R.drawable.ic_badge_easy, "Penguasaan Mudah"),
         Badge(2, R.drawable.ic_badge_medium, "Penguasaan Sedang")
+    )
+
+    val dummyNotif: List<Notification> = listOf(
+        Notification(1, R.drawable.tomato, "Jangan lupa menyiram tanaman tomatmu hari ini!", "Tomat", "03/12", NotifType.TODAY,false),
+        Notification(2, R.drawable.garlic, "Jangan lupa memberi pupuk tanaman bawang putihmu hari ini!", "Bawang Putih", "03/12", NotifType.TODAY, false),
+        Notification(3, R.drawable.spring_onion, "Jangan lupa menyiram tanaman daun bawangmu hari ini!", "Daun Bawang", "02/12", NotifType.NOT_TODAY, true),
+        Notification(3, R.drawable.caisim, "Jangan lupa menyiram tanaman sawimu hari ini!", "Sawi", "02/12", NotifType.NOT_TODAY, true)
     )
 }

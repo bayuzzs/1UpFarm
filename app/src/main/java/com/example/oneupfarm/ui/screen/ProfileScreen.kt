@@ -63,7 +63,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
         )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom = innerPadding.calculateBottomPadding())) {
             item {
                 ProfileTopBar(navController = navController)
             }
@@ -340,7 +340,7 @@ fun ProfileTopBar(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
             IconButton(
-                onClick = {/*TO DO*/ },
+                onClick = {navController.navigate(Screen.Notification.route)},
                 modifier = Modifier.padding(top = 24.dp)
             ) {
                 Icon(

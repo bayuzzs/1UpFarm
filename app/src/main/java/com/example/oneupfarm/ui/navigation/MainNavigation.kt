@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.oneupfarm.ui.screen.AddPlantScreen
+import com.example.oneupfarm.ui.screen.NotificationScreen
 import com.example.oneupfarm.ui.screen.PlantMonitoringScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.SettingsScreen
@@ -25,6 +26,9 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
     }
     composable(Screen.Settings.route) {
         SettingsScreen(navController = navController)
+    }
+    composable(Screen.Notification.route) {
+        NotificationScreen(navController = navController)
     }
 
     composable(
