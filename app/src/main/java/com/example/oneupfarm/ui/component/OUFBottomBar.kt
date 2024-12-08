@@ -90,7 +90,7 @@ fun OUFBottomBar(navController: NavController, modifier: Modifier = Modifier) {
                     .padding(3.dp)
                     .align(Alignment.Center)
             ) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = { navController.navigate(Screen.ToDo.route) }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_plant),
                         contentDescription = null,

@@ -1,12 +1,15 @@
 package com.example.oneupfarm.data
 
-import com.example.oneupfarm.model.NavigationItem
 import com.example.oneupfarm.R
-import com.example.oneupfarm.model.ChoosePlant
-import com.example.oneupfarm.model.PlantEducation
 import com.example.oneupfarm.model.Badge
+import com.example.oneupfarm.model.ChoosePlant
+import com.example.oneupfarm.model.NavigationItem
 import com.example.oneupfarm.model.NotifType
 import com.example.oneupfarm.model.Notification
+import com.example.oneupfarm.model.PlantEducation
+import com.example.oneupfarm.model.Task
+import com.example.oneupfarm.model.ToDo
+
 
 object DataSource {
     val navigationItems: List<NavigationItem> = listOf(
@@ -79,9 +82,61 @@ object DataSource {
     )
 
     val dummyNotif: List<Notification> = listOf(
-        Notification(1, R.drawable.tomato, "Jangan lupa menyiram tanaman tomatmu hari ini!", "Tomat", "03/12", NotifType.TODAY,false),
-        Notification(2, R.drawable.garlic, "Jangan lupa memberi pupuk tanaman bawang putihmu hari ini!", "Bawang Putih", "03/12", NotifType.TODAY, false),
-        Notification(3, R.drawable.spring_onion, "Jangan lupa menyiram tanaman daun bawangmu hari ini!", "Daun Bawang", "02/12", NotifType.NOT_TODAY, true),
-        Notification(3, R.drawable.caisim, "Jangan lupa menyiram tanaman sawimu hari ini!", "Sawi", "02/12", NotifType.NOT_TODAY, true)
+        Notification(
+            1,
+            R.drawable.tomato,
+            "Jangan lupa menyiram tanaman tomatmu hari ini!",
+            "Tomat",
+            "03/12",
+            NotifType.TODAY,
+            false
+        ),
+        Notification(
+            2,
+            R.drawable.garlic,
+            "Jangan lupa memberi pupuk tanaman bawang putihmu hari ini!",
+            "Bawang Putih",
+            "03/12",
+            NotifType.TODAY,
+            false
+        ),
+        Notification(
+            3,
+            R.drawable.spring_onion,
+            "Jangan lupa menyiram tanaman daun bawangmu hari ini!",
+            "Daun Bawang",
+            "02/12",
+            NotifType.NOT_TODAY,
+            true
+        ),
+        Notification(
+            3,
+            R.drawable.caisim,
+            "Jangan lupa menyiram tanaman sawimu hari ini!",
+            "Sawi",
+            "02/12",
+            NotifType.NOT_TODAY,
+            true
+        )
+    )
+    val dummyTaskNotDone: List<Task> = listOf(
+        Task(1, "Siram tanaman", 13, 10),
+        Task(2, "Pemberian pupuk", null, 40),
+        Task(3, "Cari penyakit & hama", null, 5),
+        Task(4, "Bersihkan tanaman & sekitar", 30, null)
+    )
+
+    val dummyTaskDone: List<Task> = listOf(
+        Task(1, "Siram tanaman", 13, 10, true),
+        Task(2, "Pemberian pupuk", null, 40, true),
+        Task(3, "Cari penyakit & hama", null, 5, true),
+        Task(4, "Bersihkan tanaman & sekitar", 30, null, true)
+    )
+
+    val dummyToDos: List<ToDo> = listOf(
+        ToDo(1, "Tomat", R.drawable.lettuce, dummyTaskNotDone.toMutableList()),
+        ToDo(2, "Selada", R.drawable.lettuce, dummyTaskNotDone.toMutableList()),
+        ToDo(3, "Bawang Merah", R.drawable.lettuce, dummyTaskDone.toMutableList()),
+        ToDo(4, "Cabai", R.drawable.lettuce, dummyTaskDone.toMutableList()),
     )
 }
