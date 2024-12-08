@@ -5,6 +5,8 @@ import com.example.oneupfarm.R
 import com.example.oneupfarm.model.ChoosePlant
 import com.example.oneupfarm.model.PlantEducation
 import com.example.oneupfarm.model.Badge
+import com.example.oneupfarm.model.Task
+import com.example.oneupfarm.model.ToDo
 
 object DataSource {
     val navigationItems: List<NavigationItem> = listOf(
@@ -74,5 +76,26 @@ object DataSource {
     val dummyBadge: List<Badge> = listOf(
         Badge(1, R.drawable.ic_badge_easy, "Penguasaan Mudah"),
         Badge(2, R.drawable.ic_badge_medium, "Penguasaan Sedang")
+    )
+
+    val dummyTaskNotDone: List<Task> = listOf(
+        Task(1,"Siram tanaman", 13, 10),
+        Task(2, "Pemberian pupuk", null, 40),
+        Task(3, "Cari penyakit & hama", null, 5),
+        Task(4, "Bersihkan tanaman & sekitar", 30, null)
+    )
+
+    val dummyTaskDone: List<Task> = listOf(
+        Task(1, "Siram tanaman", 13, 10, true),
+        Task(2, "Pemberian pupuk", null, 40, true),
+        Task(3, "Cari penyakit & hama", null, 5, true),
+        Task(4, "Bersihkan tanaman & sekitar", 30, null, true)
+    )
+
+    val dummyToDos: List<ToDo> = listOf(
+        ToDo(1, "Tomat", R.drawable.lettuce, dummyTaskNotDone.toMutableList()),
+        ToDo(2, "Selada", R.drawable.lettuce, dummyTaskNotDone.toMutableList()),
+        ToDo(3, "Bawang Merah", R.drawable.lettuce, dummyTaskDone.toMutableList()),
+        ToDo(4, "Cabai", R.drawable.lettuce, dummyTaskDone.toMutableList()),
     )
 }

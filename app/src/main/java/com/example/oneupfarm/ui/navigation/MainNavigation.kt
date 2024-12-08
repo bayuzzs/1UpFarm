@@ -8,6 +8,7 @@ import com.example.oneupfarm.ui.screen.AddPlantScreen
 import com.example.oneupfarm.ui.screen.PlantMonitoringScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.SettingsScreen
+import com.example.oneupfarm.ui.screen.ToDoScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
 
 fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
@@ -25,6 +26,16 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
     }
     composable(Screen.Settings.route) {
         SettingsScreen(navController = navController)
+    }
+
+    composable(
+        Screen.ToDo.route,
+        enterTransition = { slideInTransition() },
+        exitTransition = { slideOutTransition() },
+        popEnterTransition = { slideInTransitionPop() },
+        popExitTransition = { slideOutTransitionPop() }
+    ) {
+        ToDoScreen(navController = navController)
     }
 
     composable(
