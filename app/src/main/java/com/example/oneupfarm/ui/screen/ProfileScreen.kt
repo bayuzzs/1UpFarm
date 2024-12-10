@@ -1,5 +1,6 @@
 package com.example.oneupfarm.ui.screen
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,13 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +34,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -53,28 +53,53 @@ import com.example.oneupfarm.model.Badge
 import com.example.oneupfarm.ui.component.BadgeCard
 import com.example.oneupfarm.ui.component.OUFBottomBar
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    modifier: Modifier = Modifier
+) {
+    val isLoading = authViewModel.isLoading.collectAsState()
+    val user = authViewModel.user.collectAsState()
+    val token = authViewModel.token.collectAsState()
+
+
+
     Scaffold(
         bottomBar = {
-            OUFBottomBar(navController = navController,
-            modifier = Modifier
-        )
+            OUFBottomBar(
+                navController = navController,
+                modifier = Modifier
+            )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-            item {
-                ProfileTopBar(navController = navController)
+        if (isLoading.value) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator()
             }
-            item {
-                CharacterDetail(modifier = Modifier.padding(horizontal = 16.dp))
-            }
-            item {
-                StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
-            }
-            item {
-                BadgeTab(DataSource.dummyBadge, modifier = Modifier.padding(horizontal = 16.dp))
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                item {
+                    Text(user.value.toString())
+                }
+                item {
+                    ProfileTopBar(navController = navController)
+                }
+                item {
+                    CharacterDetail(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+                item {
+                    StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+                item {
+                    BadgeTab(DataSource.dummyBadge, modifier = Modifier.padding(horizontal = 16.dp))
+                }
             }
         }
     }
@@ -233,9 +258,11 @@ fun StatisticTab(modifier: Modifier = Modifier) {
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         ) {
-            Column(modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+            ) {
                 Text(
                     text = "Produktivitas",
                     fontSize = 18.sp,
@@ -350,7 +377,7 @@ fun ProfileTopBar(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Settings.route)},
+                onClick = { navController.navigate(Screen.Settings.route) },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
                 Icon(

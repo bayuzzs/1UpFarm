@@ -9,10 +9,11 @@ import com.example.oneupfarm.ui.screen.PlantMonitoringScreen
 import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.SettingsScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
-fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
+fun NavGraphBuilder.mainNavigation(navController: NavHostController, authViewModel: AuthViewModel) {
     composable(Screen.Profile.route) {
-        ProfileScreen(navController = navController)
+        ProfileScreen(navController, authViewModel)
     }
     composable(Screen.Calendar.route) {
         Text("Calendar Page")

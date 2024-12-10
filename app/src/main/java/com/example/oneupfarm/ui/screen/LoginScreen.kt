@@ -2,6 +2,7 @@
 
 package com.example.oneupfarm.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -44,9 +46,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.oneupfarm.ui.theme.Poppins
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -57,32 +66,43 @@ import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.utils.showSnackbar
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val isLoading = authViewModel.isLoading.collectAsState()
+    val navigationEvent = authViewModel.navigationEvent.collectAsState()
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen.route)
+            authViewModel.resetNavigate()
+        }
+    }
 
     OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .imePadding(),
-
         ) {
 
-//            Image(
-//                painter = painterResource(id = R.drawable.ic_ellipse),
-//                contentDescription = null,
-//                contentScale = ContentScale.Fit,
-//                modifier = Modifier
-//                    .background(Color.Black)
-//                    .fillMaxWidth()
-//                    .align(Alignment.TopCenter)
-//                    .offset(y = 180.dp)
-//            )
+            //            Image(
+            //                painter = painterResource(id = R.drawable.ic_ellipse),
+            //                contentDescription = null,
+            //                contentScale = ContentScale.Fit,
+            //                modifier = Modifier
+            //                    .background(Color.Black)
+            //                    .fillMaxWidth()
+            //                    .align(Alignment.TopCenter)
+            //                    .offset(y = 180.dp)
+            //            )
 
             Box(
                 modifier = Modifier
@@ -194,7 +214,8 @@ fun LoginScreen(navController: NavController) {
                         keyboardActions = KeyboardActions.Default,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                            val icon =
+                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
@@ -219,7 +240,10 @@ fun LoginScreen(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 16.dp)
-                            .clickable { navController.navigate(Screen.ResetPassword.route) },
+                            .clickable {
+                                if (isLoading.value) return@clickable
+                                navController.navigate(Screen.ResetPassword.route)
+                            },
                         textAlign = TextAlign.End
                     )
 
@@ -227,22 +251,30 @@ fun LoginScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
-                        onClick = { navController.navigate(Screen.Profile.route) },
+                        onClick = { authViewModel.login(email = email, password = password) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(57.dp),
-                        shape = RoundedCornerShape(50.dp)
+                        shape = RoundedCornerShape(50.dp),
+                        enabled = !isLoading.value
                     ) {
-                        Text(
-                            text = "Masuk",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
+                        if (isLoading.value) {
+                            CircularProgressIndicator(
+                                color = Color.White,
+                                modifier = Modifier.size(24.dp)
                             )
-                        )
+                        } else {
+                            Text(
+                                text = "Masuk",
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontFamily = Poppins,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(14.dp))
@@ -269,6 +301,7 @@ fun LoginScreen(navController: NavController) {
                                 color = Color(0xFF661599)
                             ),
                             modifier = Modifier.clickable {
+                                if (isLoading.value) return@clickable
                                 navController.navigate(Screen.Register.route)
                             }
                         )
@@ -291,9 +324,8 @@ fun LoginScreen(navController: NavController) {
 }
 
 
-
-    @Preview(showBackground = true, widthDp = 412, heightDp = 917)
-    @Composable
-    fun LoginScreenPreview() {
-        LoginScreen(navController = rememberNavController())
-    }
+//@Preview(showBackground = true, widthDp = 412, heightDp = 917)
+//@Composable
+//fun LoginScreenPreview() {
+//    LoginScreen(navController = rememberNavController())
+//}
