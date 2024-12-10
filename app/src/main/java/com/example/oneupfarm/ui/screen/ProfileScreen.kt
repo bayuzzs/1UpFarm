@@ -58,12 +58,17 @@ import com.example.oneupfarm.ui.navigation.Screen
 fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
     Scaffold(
         bottomBar = {
-            OUFBottomBar(navController = navController,
-            modifier = Modifier
-        )
+            OUFBottomBar(
+                navController = navController,
+                modifier = Modifier
+            )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom = innerPadding.calculateBottomPadding())) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = innerPadding.calculateBottomPadding())
+        ) {
             item {
                 ProfileTopBar(navController = navController)
             }
@@ -233,9 +238,11 @@ fun StatisticTab(modifier: Modifier = Modifier) {
                 .padding(top = 16.dp)
                 .fillMaxWidth()
         ) {
-            Column(modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+            ) {
                 Text(
                     text = "Produktivitas",
                     fontSize = 18.sp,
@@ -340,7 +347,7 @@ fun ProfileTopBar(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Notification.route)},
+                onClick = { navController.navigate(Screen.Notification.route) },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
                 Icon(
@@ -350,7 +357,7 @@ fun ProfileTopBar(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
             IconButton(
-                onClick = {navController.navigate(Screen.Settings.route)},
+                onClick = { navController.navigate(Screen.Settings.route) },
                 modifier = Modifier.padding(top = 24.dp)
             ) {
                 Icon(

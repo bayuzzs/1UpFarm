@@ -61,7 +61,8 @@ fun LogOutDialog(
                 Image(
                     painter = painterResource(R.drawable.sadmascot),
                     contentDescription = null,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 8.dp)
                         .size(120.dp)
                 )
                 Text(
@@ -78,7 +79,7 @@ fun LogOutDialog(
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
                     Button(
-                        onClick = {onDismissRequest()},
+                        onClick = { onDismissRequest() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFFD0ACFF),
                             contentColor = Color(0xFF7C19B9)
@@ -94,7 +95,7 @@ fun LogOutDialog(
                         )
                     }
                     Button(
-                        onClick = {/*LOG OUT*/},
+                        onClick = {/*LOG OUT*/ },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF7C19B9),
                             contentColor = Color.White
