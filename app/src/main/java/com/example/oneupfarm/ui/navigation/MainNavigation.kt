@@ -25,7 +25,7 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
         TrackPlantScreen(navController = navController)
     }
     composable(Screen.Settings.route) {
-        SettingsScreen()
+        SettingsScreen(navController = navController)
     }
     composable(Screen.Notification.route) {
         NotificationScreen(navController = navController)
