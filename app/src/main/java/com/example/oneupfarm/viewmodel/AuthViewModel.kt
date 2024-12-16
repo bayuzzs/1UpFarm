@@ -110,6 +110,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                delay(200)
                 val response = repository.getUserInfo()
 //                Log.i("RESPONSE", response.toString())
                 if (response.isSuccessful) {
@@ -129,6 +130,11 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                 _isLoading.value = false
             }
         }
+    }
+
+    fun logout(){
+        clearToken()
+        setNavigation(Screen.Login.route)
     }
 
     fun clearToken() {

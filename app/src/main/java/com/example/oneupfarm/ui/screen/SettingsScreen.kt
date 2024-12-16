@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -26,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,24 +43,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oneupfarm.R
+import com.example.oneupfarm.data.model.Gender
+import com.example.oneupfarm.data.model.User
 import com.example.oneupfarm.ui.component.LogOutDialog
+import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun SettingsScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    modifier: Modifier = Modifier
+) {
     val showDialog = remember { mutableStateOf(false) }
+    val isLoading = authViewModel.isLoading.collectAsState()
+    val user = authViewModel.user.collectAsState()
+    val token = authViewModel.token.collectAsState()
+    val navigationEvent = authViewModel.navigationEvent.collectAsState()
+
+    LaunchedEffect(token) {
+        if (token.value == null) {
+            navController.navigate(Screen.Welcome.route)
+            return@LaunchedEffect
+        }
+        authViewModel.getUserInfo()
+//        Log.i("USER INFO", user.toString())
+    }
+
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen){
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+            authViewModel.resetNavigate()
+        }
+    }
+
 
     Scaffold(
         topBar = {
             SettingsTopBar(navController)
         },
         containerColor = Color(0xFFF4EFF8)
-    ) {
-        innerPadding ->
-        Column(modifier = modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+        ) {
             AccountCard(
-                avatarImage = R.drawable.boyavatar,
-                name = "Khelfa Zacky",
-                email = "jakianjay091@gmail.com",
+                isLoading = isLoading.value,
+                user = user.value,
                 modifier = Modifier.padding(16.dp)
             )
             SettingsNavigation(
@@ -67,7 +106,9 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             )
 
             if (showDialog.value) {
-                LogOutDialog { showDialog.value = false }
+                LogOutDialog(
+                    onDismissRequest = { showDialog.value = false },
+                    onLogOut = { authViewModel.logout() })
             }
         }
     }
@@ -76,56 +117,64 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
 @Composable
 fun AccountCard(
     modifier: Modifier = Modifier,
-    @DrawableRes avatarImage: Int,
-    name: String,
-    email: String
-    ) {
+    isLoading: Boolean,
+    user: User? = null,
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         modifier = modifier.fillMaxWidth()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFD9BAFF)
-                ),
+        if (isLoading || user == null) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().height(96.dp)) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(32.dp)
+                )
+            }
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
             ) {
-                Image(
-                    painter = painterResource(avatarImage),
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFD9BAFF)
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Image(
+                        painter = painterResource(if (user.gender == Gender.M) R.drawable.boyavatar else R.drawable.girlavatar),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(16.dp)
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.weight(3f)
+                ) {
+                    Text(
+                        text = user.name,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Text(
+                        text = user.email,
+                        fontSize = 11.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+                Icon(
+                    painter = painterResource(R.drawable.ic_next),
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(16.dp)
+                    tint = Color(0xFF7C19B9),
+                    modifier = Modifier.weight(1f)
                 )
             }
-            Column(
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(3f)
-            ) {
-                Text(
-                    text = name,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = email,
-                    fontSize = 11.sp,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
-            Icon(
-                painter = painterResource(R.drawable.ic_next),
-                contentDescription = null,
-                tint = Color(0xFF7C19B9),
-                modifier = Modifier.weight(1f)
-            )
         }
     }
 }
@@ -145,7 +194,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier, onLogOutClicked: () -> Uni
             SettingsSection(
                 iconImage = R.drawable.ic_bell_fill,
                 iconTitle = "Notifikasi",
-                onClick = {/*TO DO*/},
+                onClick = {/*TO DO*/ },
                 addInfo = "toggle"
             )
             HorizontalDivider(
@@ -155,7 +204,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier, onLogOutClicked: () -> Uni
             SettingsSection(
                 iconImage = R.drawable.ic_shield_fill,
                 iconTitle = "Keamanan Akun",
-                onClick = {/*TO DO*/},
+                onClick = {/*TO DO*/ },
                 addInfo = null
             )
             HorizontalDivider(
@@ -165,7 +214,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier, onLogOutClicked: () -> Uni
             SettingsSection(
                 iconImage = R.drawable.ic_report_fill,
                 iconTitle = "Masukan",
-                onClick = {/*TO DO*/},
+                onClick = {/*TO DO*/ },
                 addInfo = null
             )
             HorizontalDivider(
@@ -175,7 +224,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier, onLogOutClicked: () -> Uni
             SettingsSection(
                 iconImage = R.drawable.ic_about_fill,
                 iconTitle = "Tentang Kami",
-                onClick = {/*TO DO*/},
+                onClick = {/*TO DO*/ },
                 addInfo = null
             )
             HorizontalDivider(
@@ -185,7 +234,7 @@ fun SettingsNavigation(modifier: Modifier = Modifier, onLogOutClicked: () -> Uni
             SettingsSection(
                 iconImage = R.drawable.ic_logout_fill,
                 iconTitle = "Keluar Akun",
-                onClick = {onLogOutClicked()},
+                onClick = { onLogOutClicked() },
                 addInfo = "next"
             )
         }
@@ -257,7 +306,7 @@ fun SettingsTopBar(navController: NavController) {
             )
         },
         navigationIcon = {
-            IconButton(onClick = {navController.popBackStack()}) {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     tint = Color.Black,

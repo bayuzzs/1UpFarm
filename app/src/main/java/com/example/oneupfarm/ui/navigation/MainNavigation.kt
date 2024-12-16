@@ -25,7 +25,7 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController, authViewMod
         TrackPlantScreen(navController = navController)
     }
     composable(Screen.Settings.route) {
-        SettingsScreen(navController = navController)
+        SettingsScreen(navController = navController, authViewModel)
     }
 
     composable(

@@ -73,7 +73,11 @@ fun ProfileScreen(
 
     LaunchedEffect(token) {
         if (token.value == null) {
-            navController.navigate(Screen.Welcome.route)
+            navController.navigate(Screen.Welcome.route){
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
             return@LaunchedEffect
         }
         authViewModel.getUserInfo()
@@ -83,7 +87,7 @@ fun ProfileScreen(
     LaunchedEffect(navigationEvent.value) {
         navigationEvent.value?.let { screen ->
             navController.navigate(screen){
-                popUpTo(Screen.Profile.route) {
+                popUpTo(navController.graph.id) {
                     inclusive = true
                 }
             }
@@ -103,7 +107,7 @@ fun ProfileScreen(
     ) { innerPadding ->
         if (isLoading.value || user.value == null) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator(modifier = Modifier.size(96.dp))
+                CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
         }  else {
             LazyColumn(
