@@ -81,7 +81,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val navigationEvent = authViewModel.navigationEvent.collectAsState()
     LaunchedEffect(navigationEvent.value) {
         navigationEvent.value?.let { screen ->
-            navController.navigate(screen.route)
+            navController.navigate(screen)
             authViewModel.resetNavigate()
         }
     }

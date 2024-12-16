@@ -6,6 +6,9 @@ import com.example.oneupfarm.data.model.LoginRequest
 import com.example.oneupfarm.data.model.LoginResponse
 import com.example.oneupfarm.data.model.RegisterRequest
 import com.example.oneupfarm.data.model.RegisterResponse
+import com.example.oneupfarm.data.model.User
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,15 +22,11 @@ interface AuthApi {
 
     @POST("auth/check")
     suspend fun checkUser(@Body request: CheckUserRequest): CheckUserResponse
-}
 
-interface Test {
-    @GET("/")
-    suspend fun getHome(): GetHomeResponse
-}
+    @GET("auth/me")
+    suspend fun getUserInfo(): Response<User>
 
-data class GetHomeResponse(
-    val status: String,
-    val message: String,
-    val results: String
-)
+//    @POST("/auth/refresh")
+//    suspend fun refreshAccessToken(@Header("Authorization") refreshToken: String): Response<RefreshTokenResponse>
+
+}

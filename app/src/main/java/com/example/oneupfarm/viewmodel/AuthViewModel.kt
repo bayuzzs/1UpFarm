@@ -4,16 +4,19 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.auth0.android.jwt.JWT
+import com.example.oneupfarm.data.model.Avatar
 import com.example.oneupfarm.data.model.Gender
 import com.example.oneupfarm.data.model.User
 import com.example.oneupfarm.data.repository.AuthRepository
 import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.utils.decodeJwt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _token = MutableStateFlow<String?>(null)
@@ -25,8 +28,8 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _message = MutableStateFlow<String?>(null)
     val message: StateFlow<String?> get() = _message
 
-    private val _navigationEvent = MutableStateFlow<Screen?>(null)
-    val navigationEvent: StateFlow<Screen?> get() = _navigationEvent
+    private val _navigationEvent = MutableStateFlow<String?>(null)
+    val navigationEvent: StateFlow<String?> get() = _navigationEvent
 
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> get() = _user
@@ -39,6 +42,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         Log.i("FETCH TOKEN", "FETCH TOKEN CALLED")
         val token = repository.getToken()
         _token.value = token
+        Log.i("FETCH TOKEN", if (_token.value.isNullOrEmpty()) "NULL GUYS" else "NOT NULL")
     }
 
     fun setMessage(message: String) {
@@ -47,6 +51,10 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
 
     fun clearMessage() {
         _message.value = null
+    }
+
+    fun setNavigation(screen: String) {
+        _navigationEvent.value = screen
     }
 
     fun resetNavigate() {
@@ -58,8 +66,10 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
             userId = null,
             name = name,
             email = email,
-            gender = gender, password = password
+            gender = gender,
+            password = password,
         )
+        setNavigation(Screen.ChooseGender.route)
     }
 
     fun login(email: String, password: String) {
@@ -69,7 +79,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                 repository.login(email, password)
                 fetchToken()
                 setMessage("Berhasil Login")
-                _navigationEvent.value = Screen.Profile
+                _navigationEvent.value = Screen.Profile.route
             } catch (e: Exception) {
                 Log.e("LOGIN", "Error at login function:", e)
                 setMessage("Login Gagal, Coba Lagi")
@@ -87,7 +97,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                 fetchToken()
                 setMessage("Berhasil Daftar!")
                 delay(500)
-                _navigationEvent.value = Screen.Login
+                _navigationEvent.value = Screen.Login.route
             } catch (e: Exception) {
                 setMessage("Gagal Daftar")
             } finally {
@@ -96,40 +106,25 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         }
     }
 
-
     fun getUserInfo() {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
-                _isLoading.value = true
-                Log.i("GET USER INFO", "Before Fetch")
-                fetchToken()
-                Log.i("GET USER INFO", "After Fetch ")
-                val tokenValue = _token.value
-                if (tokenValue.isNullOrEmpty()) {
-                    Log.i("AUTH", "USER NOT AUTHENTICATED")
-                    Log.i("AUTH", tokenValue.toString())
-                    _user.value = null
+                val response = repository.getUserInfo()
+//                Log.i("RESPONSE", response.toString())
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    _user.value = user
+                    Log.i("USER VALUE", _user.value.toString())
+                } else if (response.code() == 401) {
+                    Log.i("UNAUTHORIZED", "User is not authenticated")
+                    setNavigation(Screen.Login.route)
+                    clearToken()
+                } else {
+                    Log.e("ERROR", "Unexpected error: ${response.code()}")
                 }
-
-                if (!tokenValue.isNullOrEmpty()) {
-//                    val payloadMap = decodeJwt(tokenValue)
-                    val jwt: JWT = JWT(tokenValue)
-                    Log.i("AUTH", "USER AUTHENTICATED")
-                    Log.i("PAYLOAD MAP", jwt.toString())
-                    _user.value = User(
-                        userId = jwt.getClaim("userId")
-                            .asInt(),
-                        name = jwt.getClaim("name").asString()!!,
-                        email = jwt.getClaim("email").asString()!!,
-                        gender = Gender.valueOf(jwt.getClaim("gender").asString()!!),
-                        password = null
-                    )
-                    Log.i("GET USERINFO - USER", _user.value.toString())
-                }
-
-
             } catch (e: Exception) {
-                Log.e("GetUserInfo()", "Error at getUserInfo function:", e)
+                Log.e("GET USER INFO", "Error at getUserInfo function:", e)
             } finally {
                 _isLoading.value = false
             }
@@ -137,6 +132,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     }
 
     fun clearToken() {
+        _token.value = null
         repository.clearToken()
         fetchToken()
     }

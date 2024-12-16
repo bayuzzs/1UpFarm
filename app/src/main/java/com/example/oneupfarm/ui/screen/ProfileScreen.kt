@@ -36,6 +36,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,10 +50,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oneupfarm.R
 import com.example.oneupfarm.data.DataSource
+import com.example.oneupfarm.data.api.StaticFileApi
+import com.example.oneupfarm.data.model.Gender
+import com.example.oneupfarm.data.model.User
 import com.example.oneupfarm.model.Badge
 import com.example.oneupfarm.ui.component.BadgeCard
 import com.example.oneupfarm.ui.component.OUFBottomBar
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.utils.staticRetrofit
 import com.example.oneupfarm.viewmodel.AuthViewModel
 
 @Composable
@@ -64,6 +69,27 @@ fun ProfileScreen(
     val isLoading = authViewModel.isLoading.collectAsState()
     val user = authViewModel.user.collectAsState()
     val token = authViewModel.token.collectAsState()
+    val navigationEvent = authViewModel.navigationEvent.collectAsState()
+
+    LaunchedEffect(token) {
+        if (token.value == null) {
+            navController.navigate(Screen.Welcome.route)
+            return@LaunchedEffect
+        }
+        authViewModel.getUserInfo()
+//        Log.i("USER INFO", user.toString())
+    }
+
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen){
+                popUpTo(Screen.Profile.route) {
+                    inclusive = true
+                }
+            }
+            authViewModel.resetNavigate()
+        }
+    }
 
 
 
@@ -75,24 +101,21 @@ fun ProfileScreen(
             )
         }
     ) { innerPadding ->
-        if (isLoading.value) {
+        if (isLoading.value || user.value == null) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(modifier = Modifier.size(96.dp))
             }
-        } else {
+        }  else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
                 item {
-                    Text(user.value.toString())
-                }
-                item {
                     ProfileTopBar(navController = navController)
                 }
                 item {
-                    CharacterDetail(modifier = Modifier.padding(horizontal = 16.dp))
+                    CharacterDetail(user = user.value, modifier = Modifier.padding(horizontal = 16.dp))
                 }
                 item {
                     StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
@@ -106,7 +129,10 @@ fun ProfileScreen(
 }
 
 @Composable
-fun CharacterDetail(modifier: Modifier = Modifier) {
+fun CharacterDetail(user: User?,modifier: Modifier = Modifier) {
+    val health = user?.avatar?.health?.toFloat() ?: 0f
+    val maxHealth = user?.avatar?.maxHealth?.toFloat() ?: 1f
+    val progress = if (maxHealth > 0) health / maxHealth else 0f
     Surface(
         modifier = modifier.padding(bottom = 16.dp),
         shape = RoundedCornerShape(
@@ -118,7 +144,7 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
         color = Color.White
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            AvatarCard()
+            AvatarCard(user?.gender)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(start = 16.dp)
@@ -127,19 +153,19 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
                     iconRes = R.drawable.ic_heart,
                     iconTint = Color(0xFFFD0136),
                     hasProgressIndicator = true,
-                    progressValue = 0.7f
+                    progressValue = progress
                 )
                 IconWithProgress(
                     iconRes = R.drawable.staricon,
                     iconTint = Color(0xFF0A9BC7),
                     hasProgressIndicator = true,
-                    progressValue = 0.3f
+                    progressValue = user?.avatar?.exp?.toFloat() ?: 0f
                 )
                 IconWithProgress(
                     iconRes = R.drawable.ic_gold,
                     iconTint = Color(0xFFFFCA28),
                     hasProgressIndicator = false,
-                    progressValue = 1000.0f
+                    progressValue = user?.avatar?.gold?.toFloat() ?: 0f
                 )
             }
         }
@@ -147,7 +173,7 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AvatarCard() {
+fun AvatarCard(gender: Gender? = Gender.M) {
     Box {
         Card(
             colors = CardDefaults.cardColors(
@@ -158,7 +184,7 @@ fun AvatarCard() {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(R.drawable.boyavatar),
+                painter = painterResource(if (gender == Gender.M) R.drawable.boyavatar else R.drawable.girlavatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(96.dp)

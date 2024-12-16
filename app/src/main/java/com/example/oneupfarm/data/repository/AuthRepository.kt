@@ -1,11 +1,13 @@
 package com.example.oneupfarm.data.repository
 
 import com.example.oneupfarm.data.api.AuthApi
-import com.example.oneupfarm.data.local.DataStoreManager
 import com.example.oneupfarm.data.local.TokenManager
 import com.example.oneupfarm.data.model.Gender
 import com.example.oneupfarm.data.model.LoginRequest
 import com.example.oneupfarm.data.model.RegisterRequest
+import com.example.oneupfarm.data.model.User
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 class AuthRepository(
     private val api: AuthApi,
@@ -21,6 +23,12 @@ class AuthRepository(
         // Simpan token jika register langsung login otomatis
         // tokenManager.saveToken(response.token)
     }
+
+    suspend fun getUserInfo(): Response<User>{
+        val response = api.getUserInfo()
+        return response
+    }
+
 
     fun getToken(): String? {
         return tokenManager.getToken()

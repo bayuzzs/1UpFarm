@@ -10,6 +10,15 @@ data class User(
     val name: String,
     val email: String,
     val password: String?,
-    val gender: Gender
+    val gender: Gender,
+    val avatar: Avatar? = null
 )
 
+data class Avatar(
+    val avatarId: Int,
+    val exp: Int,
+    val level: Int,
+    val gold: Int,
+    val health: Int,
+    val maxHealth: Int
+)

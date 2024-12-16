@@ -1,6 +1,7 @@
 package com.example.oneupfarm
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -19,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.data.api.AuthApi
 import com.example.oneupfarm.data.api.RetrofitClient
-import com.example.oneupfarm.data.local.DataStoreManager
 import com.example.oneupfarm.data.local.TokenManager
 import com.example.oneupfarm.data.repository.AuthRepository
 import com.example.oneupfarm.ui.navigation.Screen
@@ -38,7 +38,10 @@ fun OneUpFarm(
     val context = LocalContext.current
 
     // Setup retrofit
-    val retrofit = remember { RetrofitClient.create(context) }
+    val retrofit = remember { RetrofitClient.create(context){
+        Log.i("UNAUTHORIZED", "UNAUTHORIZED")
+        navController.navigate(Screen.Login.route)
+    } }
 
     // Ganti ke SecurePreferencesManager
     val securePreferencesManager = remember { TokenManager(context) }
