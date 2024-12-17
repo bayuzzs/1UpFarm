@@ -3,6 +3,7 @@ package com.example.oneupfarm.data
 import com.example.oneupfarm.R
 import com.example.oneupfarm.model.Badge
 import com.example.oneupfarm.model.ChoosePlant
+import com.example.oneupfarm.model.LeaderboardUser
 import com.example.oneupfarm.model.NavigationItem
 import com.example.oneupfarm.model.NotifType
 import com.example.oneupfarm.model.Notification
@@ -138,5 +139,18 @@ object DataSource {
         ToDo(2, "Selada", R.drawable.lettuce, dummyTaskNotDone.toMutableList()),
         ToDo(3, "Bawang Merah", R.drawable.lettuce, dummyTaskDone.toMutableList()),
         ToDo(4, "Cabai", R.drawable.lettuce, dummyTaskDone.toMutableList()),
+    )
+
+    val dummyLeaderboardUser: List<LeaderboardUser> = listOf(
+        LeaderboardUser(1, R.drawable.boyavatar, "Zacky Khelfa", 10, 13200),
+        LeaderboardUser(2, R.drawable.boyavatar,"Ibnu Hanif", 9, 13200),
+        LeaderboardUser(3, R.drawable.boyavatar,"Bagas Satire", 8, 13200),
+        LeaderboardUser(4, R.drawable.boyavatar,"Aldy Jhonatan", 7, 13200),
+        LeaderboardUser(5, R.drawable.girlavatar,"Rizqi Vela Syifa", 6, 13200),
+        LeaderboardUser(6, R.drawable.girlavatar,"Alia Pramestia", 5, 13200),
+        LeaderboardUser(7, R.drawable.boyavatar,"Jamal Jasuke", 4, 13200),
+        LeaderboardUser(8, R.drawable.boyavatar,"Mas Ironi", 3, 13200),
+        LeaderboardUser(9, R.drawable.boyavatar,"Mas Fuad", 2, 13200),
+        LeaderboardUser(10, R.drawable.boyavatar,"Mas Andre", 1, 13200)
     )
 }

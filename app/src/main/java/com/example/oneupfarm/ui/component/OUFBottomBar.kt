@@ -70,8 +70,8 @@ fun OUFBottomBar(navController: NavController, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier)
                 NavItem(
                     DataSource.navigationItems[2],
-                    selected = currentRoute == Screen.Calendar.route,
-                    navigationOnClick = { navController.navigate(Screen.Calendar.route) }
+                    selected = currentRoute == Screen.Leaderboard.route,
+                    navigationOnClick = { navController.navigate(Screen.Leaderboard.route) }
                 )
                 NavItem(
                     DataSource.navigationItems[3],

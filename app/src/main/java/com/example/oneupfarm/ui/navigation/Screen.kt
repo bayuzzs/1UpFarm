@@ -10,11 +10,10 @@ sealed class Screen(val route: String) {
     data object NewPassword : Screen("new_password")
     data object TrackPlant : Screen("track_plant")
     data object MarketPlace : Screen("marketplace")
-    data object Calendar : Screen("calendar")
     data object AddPlant : Screen("add_plant")
     data object PlantMonitoring: Screen("plant_monitoring")
     data object ToDo : Screen("to_do")
-
+    data object Leaderboard : Screen("leaderboard")
     data object Settings : Screen("settings")
     data object Notification : Screen("notification")
 
