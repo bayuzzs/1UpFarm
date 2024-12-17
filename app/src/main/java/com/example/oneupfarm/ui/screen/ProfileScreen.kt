@@ -8,13 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +33,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,19 +43,54 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oneupfarm.R
 import com.example.oneupfarm.data.DataSource
+import com.example.oneupfarm.data.model.Gender
+import com.example.oneupfarm.data.model.User
 import com.example.oneupfarm.model.Badge
 import com.example.oneupfarm.ui.component.BadgeCard
 import com.example.oneupfarm.ui.component.OUFBottomBar
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    modifier: Modifier = Modifier
+) {
+    val isLoading = authViewModel.isLoading.collectAsState()
+    val user = authViewModel.user.collectAsState()
+    val token = authViewModel.token.collectAsState()
+    val navigationEvent = authViewModel.navigationEvent.collectAsState()
+
+    LaunchedEffect(token) {
+        if (token.value == null) {
+            navController.navigate(Screen.Welcome.route) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+            return@LaunchedEffect
+        }
+        authViewModel.getUserInfo()
+//        Log.i("USER INFO", user.toString())
+    }
+
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+            authViewModel.resetNavigate()
+        }
+    }
+
     Scaffold(
         bottomBar = {
             OUFBottomBar(
@@ -64,29 +99,41 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = innerPadding.calculateBottomPadding())
-        ) {
-            item {
-                ProfileTopBar(navController = navController)
+        if (isLoading.value || user.value == null) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
-            item {
-                CharacterDetail(modifier = Modifier.padding(horizontal = 16.dp))
-            }
-            item {
-                StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
-            }
-            item {
-                BadgeTab(DataSource.dummyBadge, modifier = Modifier.padding(horizontal = 16.dp))
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                item {
+                    ProfileTopBar(navController = navController)
+                }
+                item {
+                    CharacterDetail(
+                        user = user.value,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+                item {
+                    StatisticTab(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+                item {
+                    BadgeTab(DataSource.dummyBadge, modifier = Modifier.padding(horizontal = 16.dp))
+                }
             }
         }
     }
 }
 
 @Composable
-fun CharacterDetail(modifier: Modifier = Modifier) {
+fun CharacterDetail(user: User?, modifier: Modifier = Modifier) {
+    val health = user?.avatar?.health?.toFloat() ?: 0f
+    val maxHealth = user?.avatar?.maxHealth?.toFloat() ?: 1f
+    val progress = if (maxHealth > 0) health / maxHealth else 0f
     Surface(
         modifier = modifier.padding(bottom = 16.dp),
         shape = RoundedCornerShape(
@@ -98,7 +145,7 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
         color = Color.White
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            AvatarCard()
+            AvatarCard(user?.gender)
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(start = 16.dp)
@@ -107,19 +154,19 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
                     iconRes = R.drawable.ic_heart,
                     iconTint = Color(0xFFFD0136),
                     hasProgressIndicator = true,
-                    progressValue = 0.7f
+                    progressValue = progress
                 )
                 IconWithProgress(
                     iconRes = R.drawable.staricon,
                     iconTint = Color(0xFF0A9BC7),
                     hasProgressIndicator = true,
-                    progressValue = 0.3f
+                    progressValue = user?.avatar?.exp?.toFloat() ?: 0f
                 )
                 IconWithProgress(
                     iconRes = R.drawable.ic_gold,
                     iconTint = Color(0xFFFFCA28),
                     hasProgressIndicator = false,
-                    progressValue = 1000.0f
+                    progressValue = user?.avatar?.gold?.toFloat() ?: 0f
                 )
             }
         }
@@ -127,7 +174,7 @@ fun CharacterDetail(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AvatarCard() {
+fun AvatarCard(gender: Gender? = Gender.M) {
     Box {
         Card(
             colors = CardDefaults.cardColors(
@@ -138,7 +185,7 @@ fun AvatarCard() {
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(R.drawable.boyavatar),
+                painter = painterResource(if (gender == Gender.M) R.drawable.boyavatar else R.drawable.girlavatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(96.dp)

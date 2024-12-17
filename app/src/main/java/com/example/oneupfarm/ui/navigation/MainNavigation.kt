@@ -12,10 +12,11 @@ import com.example.oneupfarm.ui.screen.ProfileScreen
 import com.example.oneupfarm.ui.screen.SettingsScreen
 import com.example.oneupfarm.ui.screen.ToDoScreen
 import com.example.oneupfarm.ui.screen.TrackPlantScreen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
-fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
+fun NavGraphBuilder.mainNavigation(navController: NavHostController, authViewModel: AuthViewModel) {
     composable(Screen.Profile.route) {
-        ProfileScreen(navController = navController)
+        ProfileScreen(navController, authViewModel)
     }
     composable(Screen.MarketPlace.route) {
         Text("MarketPlace Page")
@@ -24,7 +25,7 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
         TrackPlantScreen(navController = navController)
     }
     composable(Screen.Settings.route) {
-        SettingsScreen(navController = navController)
+        SettingsScreen(navController = navController, authViewModel)
     }
     composable(Screen.Notification.route) {
         NotificationScreen(navController = navController)
@@ -53,9 +54,18 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
         AddPlantScreen(navController, onClose = { navController.popBackStack() })
     }
 
-    composable(Screen.PlantMonitoring.route) {
+//    composable(Screen.PlantMonitoring.route) {
+//        PlantMonitoringScreen(
+//            navController = navController,
+//            onClose = {})
+//    }
+
+    composable(Screen.UserPlantDetail("{userPlantId}").route) { backStackEntry ->
+        val userPlantId = backStackEntry.arguments?.getString("userPlantId")
         PlantMonitoringScreen(
             navController = navController,
-            onClose = {})
+            userPlantId = userPlantId ?: "Unknown ID",
+            onClose = { navController.popBackStack() })
     }
+
 }

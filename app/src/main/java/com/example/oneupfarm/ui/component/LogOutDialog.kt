@@ -36,7 +36,8 @@ import com.example.oneupfarm.R
 @Composable
 fun LogOutDialog(
     modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onLogOut: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(
@@ -95,7 +96,7 @@ fun LogOutDialog(
                         )
                     }
                     Button(
-                        onClick = {/*LOG OUT*/ },
+                        onClick = onLogOut,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF7C19B9),
                             contentColor = Color.White

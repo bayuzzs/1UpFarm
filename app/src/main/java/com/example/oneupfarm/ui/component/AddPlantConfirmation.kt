@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,18 +26,15 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,30 +43,86 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.oneupfarm.R
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil3.compose.SubcomposeAsyncImage
+import com.example.oneupfarm.data.api.RetrofitClient
+import com.example.oneupfarm.data.model.Plant
+import com.example.oneupfarm.data.model.UserPlant
+import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.viewmodel.PlantViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Composable
 fun AddPlantConfirmation(
     showConfirmation: MutableState<Boolean>,
-    onNavigateToNextScreen: () -> Unit
+    plant: Plant,
+    methodPlant: String,
+    locationPlant: String,
+    plantViewModel: PlantViewModel,
+    onNavigateToNextScreen: () -> Unit,
+    navController: NavController
 ) {
     val scope = rememberCoroutineScope()
-    val loading = remember { mutableStateOf(false) }
+    val isLoading = plantViewModel.isLoading.collectAsState()
     val showSuccess = remember { mutableStateOf(false) }
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val today = LocalDate.now()
+    val harvestDay = plant.harvestDay
+
+    val userPlant: UserPlant = UserPlant(
+        plantId = plant.plantId,
+        PlantDate = today.format(formatter), // Format tanggal hari ini
+        harvestDate = today.plusDays(harvestDay.toLong()).format(formatter), // Tambah harvestDay
+        Method_plant = methodPlant,
+        Location_Plant = locationPlant,
+        IsComplate = "false"
+    )
+
+    val location = when (locationPlant) {
+        "tanah" -> "Penanaman di Tanah"
+        "hidroponik" -> "Penanaman di Media"
+        else -> "Penanaman di Tanah "
+    }
+
+    val plantDescription = "${location} - ${methodPlant}"
+
+//    val userPlant: UserPlant = UserPlant(
+//        plantId = plant.plantId,
+//        PlantDate = {/* ToDO */ },
+//        harvestDate = {/* ToDO */ },
+//        Method_plant = methodPlant,
+//        Location_Plant = locationPlant,
+//        IsComplate = "false"
+//    )
+    val indoFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id"))
 
     LaunchedEffect(showSuccess.value) {
         if (showSuccess.value) {
             delay(1000)
             showConfirmation.value = false
             onNavigateToNextScreen()
+        }
+    }
+
+    val navigationEvent = plantViewModel.navigationEvent.collectAsState()
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen){
+                popUpTo(Screen.AddPlant.route) {
+                    inclusive = true
+                }
+            }
+            plantViewModel.resetNavigate()
         }
     }
 
@@ -104,7 +156,7 @@ fun AddPlantConfirmation(
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = {
-                            if (!loading.value && !showSuccess.value) {
+                            if (!isLoading.value && !showSuccess.value) {
                                 showConfirmation.value = false
                             }
                         }
@@ -146,22 +198,31 @@ fun AddPlantConfirmation(
                         .fillMaxWidth()
                         .padding(12.dp)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.lettuce),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                    SubcomposeAsyncImage(
+                        model = "${RetrofitClient.STATIC_BASE_URL}${plant.urlPicture}",
+                        contentDescription = plant.plantName,
+                        loading = {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        },
                         modifier = Modifier
                             .size(56.dp)
                             .clip(RoundedCornerShape(20.dp))
                     )
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            "Bawang Merah",
+                            plant.plantName,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            "Penanaman di Tanah - Pot",
+                            plantDescription,
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.W400
                         )
@@ -172,9 +233,11 @@ fun AddPlantConfirmation(
 
                 PlantForecast(
                     leftTitle = "Pada Hari ini",
-                    leftDescription = "27 Mei 2024",
+                    leftDescription = LocalDate.parse(userPlant.PlantDate, formatter)
+                        .format(indoFormatter),
                     rightTitle = "Prediksi Panen",
-                    rightDescription = "05 Oktober 2024"
+                    rightDescription = LocalDate.parse(userPlant.harvestDate, formatter)
+                        .format(indoFormatter),
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -187,7 +250,7 @@ fun AddPlantConfirmation(
                 ) {
                     Button(
                         onClick = {
-                            if (!loading.value && !showSuccess.value) {
+                            if (!isLoading.value && !showSuccess.value) {
                                 showConfirmation.value = false
                             }
                         },
@@ -195,24 +258,22 @@ fun AddPlantConfirmation(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.primary
+
                         ),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                        enabled = !loading.value && !showSuccess.value
+                        enabled = !isLoading.value && !showSuccess.value
                     ) {
                         Text("Batal")
                     }
 
                     Button(
                         onClick = {
-                            loading.value = true
                             scope.launch {
-                                delay(2000)
-                                loading.value = false
-                                showSuccess.value = true
+                                plantViewModel.addUserPlant(userPlant)
                             }
                         },
                         modifier = Modifier.weight(1f),
-                        enabled = !loading.value && !showSuccess.value
+                        enabled = !isLoading.value && !showSuccess.value
                     ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(),
@@ -220,24 +281,17 @@ fun AddPlantConfirmation(
                         ) {
                             Crossfade(
                                 targetState = when {
-                                    loading.value -> ButtonState.Loading
-                                    showSuccess.value -> ButtonState.Success
+                                    isLoading.value -> ButtonState.isLoading
                                     else -> ButtonState.Initial
                                 },
                                 animationSpec = tween(300), label = ""
                             ) { state ->
                                 when (state) {
                                     ButtonState.Initial -> Text("Mulai")
-                                    ButtonState.Loading -> CircularProgressIndicator(
+                                    ButtonState.isLoading -> CircularProgressIndicator(
                                         modifier = Modifier.size(24.dp),
                                         color = MaterialTheme.colorScheme.onPrimary,
                                         strokeWidth = 2.dp
-                                    )
-                                    ButtonState.Success -> Icon(
-                                        imageVector = Icons.Default.Check,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onPrimary,
-                                        modifier = Modifier.size(24.dp)
                                     )
                                 }
                             }
@@ -250,5 +304,5 @@ fun AddPlantConfirmation(
 }
 
 private enum class ButtonState {
-    Initial, Loading, Success
+    Initial, isLoading
 }

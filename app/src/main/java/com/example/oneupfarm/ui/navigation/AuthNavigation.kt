@@ -9,19 +9,20 @@ import com.example.oneupfarm.ui.screen.NewPasswordScreen
 import com.example.oneupfarm.ui.screen.RegisterScreen
 import com.example.oneupfarm.ui.screen.ResetPasswordScreen
 import com.example.oneupfarm.ui.screen.WelcomeScreen
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
-fun NavGraphBuilder.authNavigation(navController: NavHostController) {
+fun NavGraphBuilder.authNavigation(navController: NavHostController, authViewModel: AuthViewModel) {
     composable(Screen.Welcome.route) {
         WelcomeScreen(navController = navController)
     }
     composable(Screen.Login.route) {
-        LoginScreen(navController = navController)
+        LoginScreen(navController = navController, authViewModel)
     }
     composable(Screen.Register.route) {
-        RegisterScreen(navController = navController)
+        RegisterScreen(navController, authViewModel)
     }
     composable(Screen.ChooseGender.route) {
-        ChooseGenderScreen(navController = navController)
+        ChooseGenderScreen(navController = navController, authViewModel)
     }
     composable(Screen.ResetPassword.route) {
         ResetPasswordScreen(navController = navController)

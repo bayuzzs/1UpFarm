@@ -2,6 +2,7 @@
 
 package com.example.oneupfarm.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,11 +27,24 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,31 +53,49 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.oneupfarm.ui.theme.Poppins
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.R
+import com.example.oneupfarm.data.model.Gender
+import com.example.oneupfarm.ui.component.OUFBackground
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.ui.theme.Poppins
+import com.example.oneupfarm.utils.showSnackbar
+import com.example.oneupfarm.viewmodel.AuthViewModel
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val isLoading = authViewModel.isLoading.collectAsState()
+//    val scope = rememberCoroutineScope()
+//    val message = authViewModel.message.collectAsState()
+//    val snackbarHost = remember { SnackbarHostState() }
+//
+//    if (message.value != null) {
+//        LaunchedEffect(message.value) {
+//            showSnackbar(snackbarHost, scope, message.value)
+//            authViewModel.clearMessage()
+//        }
+//    }
+
+    val navigationEvent = authViewModel.navigationEvent.collectAsState()
+    LaunchedEffect(navigationEvent.value) {
+        navigationEvent.value?.let { screen ->
+            navController.navigate(screen)
+            authViewModel.resetNavigate()
+        }
+    }
+
 
     OUFBackground(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -151,7 +183,7 @@ fun RegisterScreen(navController: NavController) {
                             unfocusedIndicatorColor = Color.Transparent,
                             unfocusedContainerColor = Color(0xFFD9BAFF),
                             focusedContainerColor = Color(0xFFD9BAFF)
-                            ),
+                        ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions.Default
                     )
@@ -228,7 +260,8 @@ fun RegisterScreen(navController: NavController) {
                         keyboardActions = KeyboardActions.Default,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                            val icon =
+                                if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
@@ -243,22 +276,35 @@ fun RegisterScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(35.dp))
 
                     Button(
-                        onClick = { navController.navigate(Screen.ChooseGender.route) },
+//                            onClick = { navController.navigate(Screen.ChooseGender.route) },
+                        onClick = {
+                            authViewModel.setUser(
+                                name,
+                                email,
+                                password,
+                                Gender.M,
+                            )
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF661599)),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(57.dp),
-                        shape = RoundedCornerShape(50.dp)
+                        shape = RoundedCornerShape(50.dp),
+                        enabled = !isLoading.value
                     ) {
-                        Text(
-                            text = "Daftar",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = Poppins,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
+                        if (isLoading.value) {
+                            CircularProgressIndicator(color = Color.White)
+                        } else {
+                            Text(
+                                text = "Daftar",
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontFamily = Poppins,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
                             )
-                        )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -285,7 +331,13 @@ fun RegisterScreen(navController: NavController) {
                                 color = Color(0xFF661599)
                             ),
                             modifier = Modifier.clickable {
-                                navController.navigate(Screen.Login.route)
+                                if (!isLoading.value) {
+                                    navController.navigate(Screen.Login.route) {
+                                        popUpTo(Screen.Register.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
                             }
                         )
                     }
@@ -307,9 +359,8 @@ fun RegisterScreen(navController: NavController) {
 }
 
 
-
-@Preview(showBackground = true, widthDp = 412, heightDp = 917)
-@Composable
-fun RegisterScreenPreview() {
-    RegisterScreen(navController = rememberNavController())
-}
+//@Preview(showBackground = true, widthDp = 412, heightDp = 917)
+//@Composable
+//fun RegisterScreenPreview() {
+//    RegisterScreen(navController = rememberNavController())
+//}
