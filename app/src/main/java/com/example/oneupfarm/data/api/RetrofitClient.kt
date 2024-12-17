@@ -8,17 +8,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://dfd0-103-191-250-218.ngrok-free.app/api/v1/"
-    private const val STATIC_BASE_URL = "https://dfd0-103-191-250-218.ngrok-free.app/"
+    private const val BASE_URL = "https://8ea8-103-191-250-218.ngrok-free.app/api/v1/"
+    const val STATIC_BASE_URL = "https://8ea8-103-191-250-218.ngrok-free.app"
 
 
-    fun create(context: Context, onUnauthorized: () -> Unit): Retrofit {
+    fun create(context: Context): Retrofit {
         val tokenManager = TokenManager(context)
         val client = OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(
-                tokenProvider = { tokenManager.getToken() },
-                onUnauthorized = onUnauthorized
-            ))
+            .addInterceptor(
+                AuthInterceptor(tokenProvider = { tokenManager.getToken() })
+            )
             .build()
 
         return Retrofit.Builder()

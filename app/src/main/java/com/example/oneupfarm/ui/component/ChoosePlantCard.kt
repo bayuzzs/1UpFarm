@@ -1,15 +1,16 @@
 package com.example.oneupfarm.ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,14 +33,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.example.oneupfarm.R
-import com.example.oneupfarm.model.ChoosePlant
+import com.example.oneupfarm.data.api.RetrofitClient
+import com.example.oneupfarm.data.model.Plant
 
 @Composable
-fun ChoosePlantCard(plant: ChoosePlant, selected: Boolean, onClick: () -> Unit = {}) {
+fun ChoosePlantCard(plant: Plant, selected: Boolean, onClick: () -> Unit = {}) {
     val badge = when (plant.difficulty) {
-        "Mudah" -> R.drawable.ic_badge_easy
-        "Sedang" -> R.drawable.ic_badge_medium
+        "mudah" -> R.drawable.ic_badge_easy
+        "sedang" -> R.drawable.ic_badge_medium
         else -> R.drawable.ic_badge_easy
     }
     Card(
@@ -70,7 +75,7 @@ fun ChoosePlantCard(plant: ChoosePlant, selected: Boolean, onClick: () -> Unit =
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = plant.name,
+                text = plant.plantName,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -106,9 +111,16 @@ fun ChoosePlantCard(plant: ChoosePlant, selected: Boolean, onClick: () -> Unit =
             }
             Spacer(modifier = Modifier.height(8.dp))
 
-            Image(
-                painter = painterResource(id = plant.icon),
-                contentDescription = plant.name,
+            SubcomposeAsyncImage(
+                model = "${RetrofitClient.STATIC_BASE_URL}${plant.urlPicture}",
+                contentDescription = plant.plantName,
+                loading = {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                },
                 modifier = Modifier
                     .size(96.dp)
                     .align(Alignment.End)

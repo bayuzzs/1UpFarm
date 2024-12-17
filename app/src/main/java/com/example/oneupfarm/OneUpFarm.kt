@@ -38,10 +38,7 @@ fun OneUpFarm(
     val context = LocalContext.current
 
     // Setup retrofit
-    val retrofit = remember { RetrofitClient.create(context){
-        Log.i("UNAUTHORIZED", "UNAUTHORIZED")
-        navController.navigate(Screen.Login.route)
-    } }
+    val retrofit = remember { RetrofitClient.create(context) }
 
     // Ganti ke SecurePreferencesManager
     val securePreferencesManager = remember { TokenManager(context) }
@@ -68,6 +65,7 @@ fun OneUpFarm(
             authViewModel.clearMessage()
         }
     }
+
 
     Scaffold(
         snackbarHost = {

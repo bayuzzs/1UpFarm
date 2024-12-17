@@ -1,5 +1,6 @@
 package com.example.oneupfarm.ui.screen
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -43,28 +44,38 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.oneupfarm.R
 import com.example.oneupfarm.data.DataSource
-import com.example.oneupfarm.model.ChoosePlant
+import com.example.oneupfarm.data.api.PlantApi
+import com.example.oneupfarm.data.api.RetrofitClient
+import com.example.oneupfarm.data.model.Plant
 import com.example.oneupfarm.ui.component.AddPlantConfirmation
 import com.example.oneupfarm.ui.component.AddPlantOption
 import com.example.oneupfarm.ui.component.ChoosePlantCard
 import com.example.oneupfarm.ui.navigation.Screen
+import com.example.oneupfarm.viewmodel.PlantViewModel
+import com.example.oneupfarm.viewmodel.PlantViewModelFactory
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,14 +83,30 @@ fun AddPlantScreen(
     navController: NavController,
     onClose: () -> Unit
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     var currentStep by remember { mutableIntStateOf(0) }
     val steps = remember { listOf("choose_place ", "choose_method", "choose_plant") }
-    val selectedChoosePlace = remember { mutableStateOf("soil") }
+    val selectedChoosePlace = remember { mutableStateOf("tanah") }
     val selectedChooseMethod = remember { mutableStateOf("pot") }
     val showConfirmation = remember { mutableStateOf(false) }
 
     val staticPlantLists = DataSource.staticPlantLists
     val selectedChoosePlant = remember { mutableIntStateOf(-1) }
+
+    val retrofit = remember { RetrofitClient.create(context) }
+    val plantApi = remember { retrofit.create(PlantApi::class.java) }
+    val plantViewModel: PlantViewModel = viewModel(factory = PlantViewModelFactory(plantApi))
+
+    val plants = plantViewModel.plants.collectAsState()
+    val isLoading = plantViewModel.isLoading.collectAsState()
+
+    SideEffect {
+        scope.launch {
+            plantViewModel.getAllPlants()
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -116,9 +143,16 @@ fun AddPlantScreen(
                         }
                     }
                     FloatingActionButton(
+
                         onClick = {
-                            if (currentStep < steps.size - 1) currentStep++ else showConfirmation.value =
-                                true
+                            if (currentStep < steps.size - 1) {
+                                currentStep++
+                            } else {
+                                if (selectedChoosePlant.intValue == -1) {
+                                    return@FloatingActionButton
+                                }
+                                showConfirmation.value = true
+                            }
                         },
                         containerColor = MaterialTheme.colorScheme.primary,
                         shape = CircleShape
@@ -165,13 +199,26 @@ fun AddPlantScreen(
                     when (currentStep) {
                         0 -> ScrollableContent { ChoosePlace(selectedChoosePlace) }
                         1 -> ScrollableContent { ChooseMethod(selectedChooseMethod) }
-                        2 -> PlantSelectionScreen(staticPlantLists, selectedChoosePlant)
+                        2 -> PlantSelectionScreen(
+                            plants = plants.value,
+                            selectedChoosePlant = selectedChoosePlant
+                        )
                     }
                 }
             }
         }
 
-        AddPlantConfirmation(showConfirmation, onNavigateToNextScreen = {navController.navigate(Screen.Profile.route)})
+        if (selectedChoosePlant.intValue != -1){
+            AddPlantConfirmation(
+                showConfirmation,
+                plant =  plants.value[selectedChoosePlant.intValue],
+                plantViewModel = plantViewModel,
+                methodPlant = selectedChooseMethod.value,
+                locationPlant = selectedChoosePlace.value,
+                onNavigateToNextScreen = { navController.navigate(Screen.Profile.route) },
+                navController = navController
+            )
+        }
 
     }
 }
@@ -214,8 +261,8 @@ fun ChoosePlace(selectedChoosePlace: MutableState<String>) {
             title = "Penanaman di Tanah",
             description = "Menanam menggunakan tanah memberikan akar tanaman akses langsung pada unsur hara alami.",
             iconId = R.drawable.ic_soil,
-            selected = selectedChoosePlace.value == "soil",
-            onClick = { selectedChoosePlace.value = "soil" }
+            selected = selectedChoosePlace.value == "tanah",
+            onClick = { selectedChoosePlace.value = "tanah" }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -224,8 +271,8 @@ fun ChoosePlace(selectedChoosePlace: MutableState<String>) {
             title = "Hidroponik",
             description = "Cara menanam menggunakan media air untuk menjadi media tanam.",
             iconId = R.drawable.ic_hydroponic,
-            selected = selectedChoosePlace.value == "hydroponic",
-            onClick = { selectedChoosePlace.value = "hydroponic" }
+            selected = selectedChoosePlace.value == "hidroponik",
+            onClick = { selectedChoosePlace.value = "hidroponik" }
         )
 
         Spacer(modifier = Modifier.height(100.dp))
@@ -299,12 +346,26 @@ fun StepProgressIndicator(
 }
 
 @Composable
-fun PlantSelectionScreen(plants: List<ChoosePlant>, selectedChoosePlant: MutableState<Int>) {
+fun PlantSelectionScreen(
+    selectedChoosePlant: MutableState<Int>,
+    plants: List<Plant>
+) {
+
+    Log.i("PLANTS", plants.toString())
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Spacer(modifier = Modifier.height(8.dp))
-        SearchBar()
-        Spacer(modifier = Modifier.height(16.dp))
-        PlantsGrid(plants = plants, selectedChoosePlant)
+        if (plants.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize()
+            )
+        }
+        if (!plants.isEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            SearchBar()
+            Spacer(modifier = Modifier.height(16.dp))
+            PlantsGrid(plants = plants, selectedChoosePlant)
+        }
     }
 }
 
@@ -333,7 +394,7 @@ fun SearchBar() {
 }
 
 @Composable
-fun PlantsGrid(plants: List<ChoosePlant>, selectedChoosePlant: MutableState<Int>) {
+fun PlantsGrid(plants: List<Plant>, selectedChoosePlant: MutableState<Int>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(12.dp),

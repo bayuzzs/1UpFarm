@@ -30,24 +30,34 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.oneupfarm.R
+import com.example.oneupfarm.data.api.PlantApi
+import com.example.oneupfarm.data.api.RetrofitClient
 import com.example.oneupfarm.ui.component.OUFBottomBar
 import com.example.oneupfarm.ui.component.TrackPlantCard
 import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.SurfaceColor
+import com.example.oneupfarm.viewmodel.PlantViewModel
+import com.example.oneupfarm.viewmodel.PlantViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun TrackPlantScreen(
@@ -56,6 +66,19 @@ fun TrackPlantScreen(
 ) {
     var isActivePlantExpanded by remember { mutableStateOf(true) }
     var isCompletePlantExpanded by remember { mutableStateOf(false) }
+
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val retrofit = remember { RetrofitClient.create(context) }
+    val plantApi = remember { retrofit.create(PlantApi::class.java) }
+    val plantViewModel: PlantViewModel = viewModel(factory = PlantViewModelFactory(plantApi))
+
+    val userPlants = plantViewModel.userPlants.collectAsState()
+    SideEffect {
+        scope.launch {
+            plantViewModel.getAllUserPlants()
+        }
+    }
 
     Scaffold(
         bottomBar = { OUFBottomBar(navController = navController) },
@@ -131,8 +154,13 @@ fun TrackPlantScreen(
                             .animateContentSize(),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
                     ) {
-                        repeat(5) {
-                            TrackPlantCard()
+
+                        if (userPlants.value.isEmpty()) {
+                            Text("Belum Ada tanaman")
+                        } else {
+                            userPlants.value.forEach { userPlant ->
+                                TrackPlantCard(navController = navController, userPlant = userPlant)
+                            }
                         }
                     }
                 }
@@ -184,9 +212,9 @@ fun TrackPlantScreen(
                             .animateContentSize(),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
                     ) {
-                        repeat(5) {
-                            TrackPlantCard()
-                        }
+//                        repeat(3) {
+//                            TrackPlantCard()
+//                        }
                     }
                 }
             }

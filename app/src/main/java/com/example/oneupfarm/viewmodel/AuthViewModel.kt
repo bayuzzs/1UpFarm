@@ -110,7 +110,6 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                delay(200)
                 val response = repository.getUserInfo()
 //                Log.i("RESPONSE", response.toString())
                 if (response.isSuccessful) {

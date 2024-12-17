@@ -1,6 +1,5 @@
 package com.example.oneupfarm.ui.screen
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +35,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,14 +48,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oneupfarm.R
 import com.example.oneupfarm.data.DataSource
-import com.example.oneupfarm.data.api.StaticFileApi
 import com.example.oneupfarm.data.model.Gender
 import com.example.oneupfarm.data.model.User
 import com.example.oneupfarm.model.Badge
 import com.example.oneupfarm.ui.component.BadgeCard
 import com.example.oneupfarm.ui.component.OUFBottomBar
 import com.example.oneupfarm.ui.navigation.Screen
-import com.example.oneupfarm.utils.staticRetrofit
 import com.example.oneupfarm.viewmodel.AuthViewModel
 
 @Composable

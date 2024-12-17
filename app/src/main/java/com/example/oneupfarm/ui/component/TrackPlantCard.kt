@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,11 +36,21 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil3.compose.SubcomposeAsyncImage
 import com.example.oneupfarm.R
+import com.example.oneupfarm.data.api.RetrofitClient
+import com.example.oneupfarm.data.model.UserPlant
+import com.example.oneupfarm.ui.navigation.Screen
 import com.example.oneupfarm.ui.theme.ButtonColor
+import com.example.oneupfarm.utils.getRelativeTime
 
 @Composable
-fun TrackPlantCard(modifier: Modifier = Modifier) {
+fun TrackPlantCard(
+    navController: NavController,
+    userPlant: UserPlant,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +66,24 @@ fun TrackPlantCard(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max),
         ) {
-            CardImage()
+//            CardImage()
+
+            SubcomposeAsyncImage(
+                model = "${RetrofitClient.STATIC_BASE_URL}${userPlant.urlPicture}",
+                contentDescription = userPlant.plantName,
+                loading = {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                },
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+//                    .aspectRatio(1f)
+                    .size(128.dp)
+                    .clip(RoundedCornerShape(12.dp))
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -61,11 +91,11 @@ fun TrackPlantCard(modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f)
             ) {
                 CardInformation(
-                    name = "Selada",
-                    status = "2 Minggu",
-                    condition = "Sedang"
+                    name = userPlant.plantName!!,
+                    status = getRelativeTime(userPlant.PlantDate),
+                    condition = "Baik"
                 )
-                CardButton()
+                CardButton(navController, userPlant.userPlantId)
             }
 
         }
@@ -133,7 +163,7 @@ fun getPlantLabelColor(condition: String): Color {
 
 fun getPlantLabelBackgroundColor(condition: String): Color {
     return when (condition) {
-        "Sedang" -> Color(0xFFFFEEB7)
+        "sedang" -> Color(0xFFFFEEB7)
         "Baik" -> Color(0xFFB7FCC9)
         "Buruk" -> Color(0xFFF7A6AE)
         else -> Color.Gray
@@ -141,9 +171,15 @@ fun getPlantLabelBackgroundColor(condition: String): Color {
 }
 
 @Composable
-fun CardButton() {
+fun CardButton(navController: NavController, userPlantId: Int?) {
     Button(
-        onClick = { },
+        onClick = {
+            navController.navigate(
+                Screen.UserPlantDetail(userPlantId.toString()).createRoute(
+                    userPlantId.toString()
+                )
+            )
+        },
         colors = ButtonDefaults.buttonColors(ButtonColor),
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 20.dp),
         modifier = Modifier

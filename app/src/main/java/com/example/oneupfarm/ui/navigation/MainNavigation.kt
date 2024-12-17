@@ -38,9 +38,18 @@ fun NavGraphBuilder.mainNavigation(navController: NavHostController, authViewMod
         AddPlantScreen(navController, onClose = { navController.popBackStack() })
     }
 
-    composable(Screen.PlantMonitoring.route) {
+//    composable(Screen.PlantMonitoring.route) {
+//        PlantMonitoringScreen(
+//            navController = navController,
+//            onClose = {})
+//    }
+
+    composable(Screen.UserPlantDetail("{userPlantId}").route) { backStackEntry ->
+        val userPlantId = backStackEntry.arguments?.getString("userPlantId")
         PlantMonitoringScreen(
             navController = navController,
-            onClose = {})
+            userPlantId = userPlantId ?: "Unknown ID",
+            onClose = { navController.popBackStack() })
     }
+
 }
